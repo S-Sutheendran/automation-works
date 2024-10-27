@@ -1,11 +1,3 @@
-/*
-1. JavaScript is asynchronous -> Which means it will not execute in an order -> await should be added in all tests to ask the executor to wait 
-2. Without declaring test the playwright will not execute the code
-3. In new version of JS, function() need not be mentioned if there is no name -> user cane give => to mention as anonymous function
-4. fixtures are global variables which should be added as a parameter to the function -> It will be inside {}
-5. Default PlayWright runs in headless mode
-*/
-
 const { test, expect } = require("@playwright/test"); //We are importing test to launch the browser and execute the tests
 
 test.only("My First PlayWright test", async ({ browser }) => {
