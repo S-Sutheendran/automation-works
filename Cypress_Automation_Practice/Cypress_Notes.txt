@@ -1,0 +1,62 @@
+---->What is Cypress?
+
+--> Cypress is a next generation front end Automation testing tool built for the modern web applications
+
+----> How Cypress is Unique from other Automation tools?
+
+--> Cypress automatically waits for commands and assertions before moving on. No more async hell.
+
+--> Ability to test Edge Testcases by Mocking the server response
+
+--> Cypress takes snapshots as your tests run. We can hover over each commands in the Command Log to see exactly what happened at each step.
+
+--> Because of its Architectural design, Cypress delivers fast, consistent and reliable test execution compared to other Automation tools
+
+--> Cypress built on Node.js and comes packaged as an npm module,
+
+--> As it is built on Node.js, It uses JavaScript for writing tests. But 90% of coding can be done using Cypress inbuilt commands which are easy to understand.
+
+--> Cypress also bundles with jQuery and inherits many of jQuery methods for UI components Identification
+
+----> Cypress Architecture
+
+--> Most testing tools (like Selenium) operate by running outside of the browser and executing remote commands across the network. 
+
+--> But Cypress engine directly operates inside the browser. In other words, It is the browser that is executing your test code
+
+--> This enables Cypress to listen and modify the browser behavior at run time by manipulating DOM and altering Network requests and responses on the fly
+
+--> Cypress open doors to New Kind of testing with Having ultimate control over your application (front and back)
+
+----> Cypress Browser Support:
+
+Chrome
+Electron
+Firefox & IE
+
+----> Cypress Components:
+
+Test Runner
+Dash Board Service
+
+Cypress Installation Steps:
+
+Step 1: Install Nodejs in the system as npm (Node Package Manager) is required to do the setup/skeleton for playwright automation
+
+Step 2: Take the Nodejs path installed in the "Program Files" and add it to environmental variables path so the automation recognizes the Nodejs
+
+Step 3: Install as code editor (VSCode using) to write and execute the automation test cases
+
+Step 4: Create new project and add package.json file
+
+----> What is package.json?
+
+--> package.json is a JSON file that exists at the root of a JavaScript/Node project.
+--> It holds metadata relevant to the project and it is used for managing the project's dependencies
+--> Open terminal from the folder -> Give npm -i init - This will give a default package.json file
+
+Step 5: npm install cypress --save-dev - This will check the package.json file to check the dependencies and save them in the file
+
+Step 6: When the same automation to be run in another system, just share the package and run: npm install it will install all the package and the automation will be ready to be executed
+
+
