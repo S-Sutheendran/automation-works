@@ -59,4 +59,14 @@ Step 5: npm install cypress --save-dev - This will check the package.json file t
 
 Step 6: When the same automation to be run in another system, just share the package and run: npm install it will install all the package and the automation will be ready to be executed
 
+Cypress Testrunner:
+
+--> To invoke the testrunner we have to give the below command:
+
+----> node_modules/.bin/cypress open - in this path the testrunner is present
+
+Cypress Locators:
+
+----> Cypress only supports CSS selectors
+
 
