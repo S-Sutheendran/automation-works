@@ -86,6 +86,7 @@ const { channel } = require("diagnostics_channel");
  */
 const config = {
   testDir: "./tests",
+  testMatch: "**/*.spec.js", // Ensure this matches your test file names
 
   timeout: 30 * 1000,
   expect: {

@@ -8,10 +8,23 @@ test("Rahulshetty Academy Login Page", async ({ browser }) => {
   const userName = page.locator("input#userEmail");
   const password = page.locator("#userPassword");
   const loginButton = page.locator("#login");
+  const productTitle = page.locator(".card-body a");
 
-  await page.goto("https://rahulshettyacademy.com/client");
+  try {
+    await page.goto("https://rahulshettyacademy.com/client");
 
-  await userName.fill("testing.4101996@gmail.com");
-  await password.fill("Testing.test@123");
-  await loginButton.click();
+    await userName.fill("testing.4101996@gmail.com");
+    await password.fill("Testing.test@123");
+    await loginButton.click();
+
+    await page.waitForLoadState("networkidle");
+    //To get all titles of the Products
+    const allProductTitles = await productTitle.allTextContents();
+    console.log(allProductTitles);
+  } catch (error) {
+    console.error(
+      "An exception occurred while accessing product titles:",
+      error.message
+    );
+  }
 });
