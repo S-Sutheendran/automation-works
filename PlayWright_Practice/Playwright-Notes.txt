@@ -34,7 +34,7 @@ Step 3: npm init playwright - This is the first step where we create a playwrigh
 
 ---> package.json:
 
-
+1. Dependencies and versions will be added 
 
 ---> Important Commands:
 
