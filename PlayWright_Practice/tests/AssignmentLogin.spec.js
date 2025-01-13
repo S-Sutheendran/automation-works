@@ -8,7 +8,7 @@ test("Rahulshetty Academy Login Page", async ({ browser }) => {
   const userName = page.locator("input#userEmail");
   const password = page.locator("#userPassword");
   const loginButton = page.locator("#login");
-  const productTitle = page.locator(".card-body a");
+  const productTitle = page.locator(".card-body b");
 
   try {
     await page.goto("https://rahulshettyacademy.com/client");
@@ -18,6 +18,8 @@ test("Rahulshetty Academy Login Page", async ({ browser }) => {
     await loginButton.click();
 
     await page.waitForLoadState("networkidle");
+    //await productTitle.first().waitFor();
+
     //To get all titles of the Products
     const allProductTitles = await productTitle.allTextContents();
     console.log(allProductTitles);

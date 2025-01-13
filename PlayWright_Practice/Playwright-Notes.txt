@@ -21,7 +21,6 @@ Step 3: npm init playwright - This is the first step where we create a playwrigh
 ---> test
 
 1. This folder contains all the test scripts we need to write to perform automation
-2.
 
 ---> tests-examples
 
@@ -61,6 +60,26 @@ Inside that directory, you can run several commands:
 We suggest that you begin by typing:
 
     npx playwright test
+
+Locators Syntax:
+
+Playwright supports only CSS selectors:
+
+----> If ID is present:
+
+--> tagname#id or #id
+
+----> If Class attribute is present
+
+--> tagname.class or .class
+
+----> CSS based on any attribute
+
+--> [attribute = 'value']
+
+----> CSS traversing from parent to child
+
+--> parenttagname >> childtagname
 
 ---> Points to be Noted:
 
@@ -120,6 +139,16 @@ playwright.config.js:
 -> This is primarily used for assertions
 
 --> use: {} - test cases will read this property and based on that tool will run
+
+----> test.only - Should not be used for multiple functions. Instead we can run the specified file in runtime:
+
+--> npx playwright test <filename>
+
+----> await page.waitForLoadState("networkidle");
+
+--> The above statement may be flaky and not work sometimes. In that case we can use:
+
+--> await productTitle.first().waitFor();
 
 
 
