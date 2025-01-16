@@ -1,6 +1,0 @@
-Flutter App Development
-
-----> MaterialApp - It is Google build system for user interfaces
-
---> Eventhough built by Google, it still offers high customization and is extendable
-
