@@ -97,7 +97,7 @@ Java, Kotlin, Flutter, React Native
 
     |── E-Commerce
     
-    ├── Blog Platforms
+    |── Blog Platforms
     
     └── Miscellaneous
     
