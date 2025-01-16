@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Hello React!</title>
+  </head>
+  <body>
+    <div id="root"></div>
+    <comment>
+      <!-- React Development Practice 
+      react.dev -> Click Installation -> download HTML page -> Copy the two <scripts></scripts> and paste it in the HTML file. 
+      -->
+    </comment>
+    <script src="https://unpkg.com/react@18/umd/react.development.js">
+      //Used for development purpose to interact with components, states and props.
+    </script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js">
+      // Used for development purpose to render the components and interact with the DOM.
+    </script>
+
+    <comment>
+      <!-- React.createElement() is used to create a React element. It takes three arguments: type, props, and children.
+      React.createElement() returns a React element object.
+      -->
+    </comment>
+    <script>
+      function App() {
+        //const time = new Date().toLocaleTimeString(); //getting the current time
+        const [time, setTime] = React.useState(new Date().toLocaleTimeString()); //using the useState hook to get the current time
+        // useEffect hook is used to perform side effects in function components and interval is used to update the time every second.
+        React.useEffect(() => {
+          const interval = setInterval(() => {
+            //arrow function to update the time
+            setTime(new Date().toLocaleTimeString());
+          }, 1000); //updating the time every second
+          return () => clearInterval(interval);
+        }, []);
+        return React.createElement("header", null, `Hello React! It's ${time}`); // React object comes from react.development.js
+      }
+
+      const rootElement = ReactDOM.createRoot(document.getElementById("root")); //creating a root element and ReactDOM object comes from react-dom.development.js
+      rootElement.render(React.createElement(App)); //rendering the App component using the function
+    </script>
+  </body>
+</html>

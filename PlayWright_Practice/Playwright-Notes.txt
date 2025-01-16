@@ -4,8 +4,6 @@ Step 2: Take the Nodejs path installed in the "Program Files" and add it to envi
 
 Step 3: npm init playwright - This is the first step where we create a playwright automation modules
 
-Step 4:
-
 --->Questions:
 
 1. Do you want to use TypeScript or JavaScript? - JavaScript (As TypeScript does not have much difference compared to JavaScript)
@@ -23,7 +21,6 @@ Step 4:
 ---> test
 
 1. This folder contains all the test scripts we need to write to perform automation
-2.
 
 ---> tests-examples
 
@@ -36,7 +33,7 @@ Step 4:
 
 ---> package.json:
 
-
+1. Dependencies and versions will be added 
 
 ---> Important Commands:
 
@@ -64,6 +61,26 @@ We suggest that you begin by typing:
 
     npx playwright test
 
+Locators Syntax:
+
+Playwright supports only CSS selectors:
+
+----> If ID is present:
+
+--> tagname#id or #id
+
+----> If Class attribute is present
+
+--> tagname.class or .class
+
+----> CSS based on any attribute
+
+--> [attribute = 'value']
+
+----> CSS traversing from parent to child
+
+--> parenttagname >> childtagname
+
 ---> Points to be Noted:
 
 --> const {test} = require('@playwright/test'); //Importing this annotation from jar
@@ -85,10 +102,53 @@ test('First Playwright Automation Test', async ()=>{
     //Playwright automation code will go here
 });
 
---> {browser} - is a fixture to inform playwright to invoke the browser
+--> {browser} - is a fixture to inform playwright to invoke the browser and it is passed as a parameter
 
---> const context = await browser.newContext(); // Browser info will be mentioned in config file
+-> Since it need to be recognized as playwright fixtures it is enclosed in curly braces
+
+--> When we open a browser the cookies and extensions will be there.
+
+-> const context = await browser.newContext(); // Browser info will be mentioned in config file
+
+-> If it is given as newContext() it is like opening the browser in incognito mode
+
+-> If need to inject cookies or proxies then it can be sent as parameter in newContext() - Showed later in notes
 
 --> Default PlayWright runs in headless mode
 
---> The newContext() will open the browser with all cookies, plugins etc and those can be stored for later run also
+--> test("Page PlayWright test", async ({ page }) => {})
+
+-> When given like this playwright automatically understands that the browser to be opened without any cookies
+
+--> npx playwright test --headed - This command is used to run in headed mode
+
+--> This is also mentioned in config.js file
+
+playwright.config.js:
+
+--> const config = {} - config object is getting created
+
+--> testDir: "./tests", - Mentioning the directory where the test files are written
+
+--> timeout: 30 * 1000, - How much time the tool should wait until it throws error
+
+--> expect: {
+    timeout: 5000,
+  },
+
+-> This is primarily used for assertions
+
+--> use: {} - test cases will read this property and based on that tool will run
+
+----> test.only - Should not be used for multiple functions. Instead we can run the specified file in runtime:
+
+--> npx playwright test <filename>
+
+----> await page.waitForLoadState("networkidle");
+
+--> The above statement may be flaky and not work sometimes. In that case we can use:
+
+--> await productTitle.first().waitFor();
+
+
+
