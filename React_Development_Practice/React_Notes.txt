@@ -1,3 +1,13 @@
 1. Setting up new React apps
 
-1.1.  
+1.1.  Snippets.json
+
+--> Pieces of predefined codes which can speed up the development
+--> // cl = console log
+--> // rfc = react functional component
+--> // rsc = react styled component
+
+1.2. create-react-app
+
+--> Open Command Prompt/Terminal
+--> Type = npx create-react-app@<version name> <name of the app>
