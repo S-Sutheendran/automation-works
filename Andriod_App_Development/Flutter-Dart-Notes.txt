@@ -1,0 +1,218 @@
+Flutter:
+- Open-source UI software development toolkit by Google.
+- Used for developing natively compiled applications for mobile, web, and desktop from a single codebase.
+- Uses Dart programming language.
+- Provides a rich set of pre-designed widgets and tools for building beautiful UIs.
+- Supports hot reload for quick iterations during development.
+
+Dart:
+- A client-optimized programming language for fast apps on any platform.
+- Developed by Google.
+- Used as the primary language for Flutter development.
+- Supports both ahead-of-time (AOT) and just-in-time (JIT) compilation.
+- Features a sound type system, garbage collection, and async-await for concurrency.
+
+Flutter Architecture:
+- Composed of three main layers: Framework, Engine, and Embedder.
+- Framework: Written in Dart, provides a rich set of pre-designed widgets and tools.
+- Engine: Written in C++, provides low-level rendering support using Skia.
+- Embedder: Platform-specific code that allows Flutter to run on different operating systems.
+
+Dart Architecture:
+- Consists of the Dart VM, core libraries, and package ecosystem.
+- Dart VM: Executes Dart code and supports both AOT(Ahead-of-Time) and JIT(Just-in-Time) compilation.
+- Core Libraries: Provide essential APIs for Dart development.
+- Package Ecosystem: A rich set of packages available through pub.dev for extending functionality.
+
+Flutter Advantages:
+- Single codebase for multiple platforms: Write once, run anywhere.
+- Fast development with hot reload: See changes instantly without restarting the app.
+- Expressive and flexible UI: Build custom, complex UIs with ease.
+- Strong community and ecosystem: Access to a wide range of packages and plugins.
+- Performance: High performance due to direct compilation to native code.
+
+- AOT:
+  
+  Definition: AOT compilation translates the source code into native machine code before the application is run.
+  
+  Advantages:
+  -> Faster Startup: Since the code is already compiled, the application starts faster.
+  -> Performance: Native machine code can be optimized for performance.
+  -> Security: The source code is not exposed, making it harder to reverse-engineer.
+  
+  Disadvantages:
+  -> Compilation Time: The initial compilation process can be time-consuming.
+  -> Less Flexibility: Changes in the code require recompilation.
+
+- JIT:
+
+  Definition: JIT compilation translates the source code into machine code at runtime, as the application is running.
+  
+  Advantages:
+  -> Flexibility: Code can be modified and recompiled on the fly, which is useful during development.
+  -> Shorter Development Cycle: Developers can see changes immediately without waiting for a full recompilation.
+  
+  Disadvantages:
+  -> Slower Startup: The application may take longer to start because the code is being compiled at runtime.
+  -> Performance: May not be as optimized as AOT-compiled code.
+
+- Usage in Flutter
+
+  -> Development Mode: Flutter uses JIT compilation to allow for hot reloads, enabling developers to see changes instantly.
+  -> Release Mode: Flutter uses AOT compilation to optimize the app for performance and faster startup times.
+
+Flutter documentation:
+
+  -> https://docs.flutter.dev/ - Offical documentation page
+  -> https://api.flutter.dev/ - Offical API documentation page
+  -> https://www.youtube.com/c/flutterdev - video documentation channel
+  -> https://docs.flutter.dev/ui/widgets - Widget Catalog
+
+Flutter Setup:
+
+  -> https://docs.flutter.dev/get-started/install - Official documentation page for flutter installation
+  -> Pre-condition - Git need to be installed
+  -> flutter doctor - To check whether the flutter is installed properly or not
+  -> Android Studio to be installed - For Android SDK tool and virtual devices to run and debug the code in real app
+    -> More Actions -> SDK Manager -> Under SDK Platform -> Latest Android Platform
+    -> More Actions -> SDK Manager -> Under SDK Tools -> Android SDK command line tools, Android Emulator, Android SDK platform tools
+    -> More Actions -> Virtual Device Manager -> Select devices -> Click on Next -> Run and Check the Device
+
+Flutter Project Creation:
+
+  -> Go to the terminal/path in cmd prompt
+  -> Type: flutter create <project name with underscore>
+
+VSCode Emulator Launch:
+
+  -> Click View -> Open Command Pallette -> Search "Flutter: Launch Emulator" -> Select device that need to be launched
+
+Running App:
+
+  -> Open the default mains.dart file -> Above main function -> Click Run
+  -> Open Integrated Terminal -> Type "flutter run"
+  -> Click on Run -> Run Without Debugging
+
+Material Design:
+
+    -> A design language developed by Google, emphasizing visual, motion, and interaction design.
+    -> Provides a consistent and cohesive look and feel across different platforms and devices.
+    -> Flutter includes a rich set of Material Design widgets to create visually appealing and responsive UIs.
+
+MaterialApp:
+
+    -> A convenience widget that wraps several widgets commonly required for Material Design applications.
+    -> Provides a consistent theme, navigation, and localization support.
+    -> https://m3.material.io/ - Official documentation for Material Design
+
+Flutter Project Structure and Uses:
+
+  1. android/: Contains the Android-specific code and configuration files.
+    - Uses: Manages the Android platform integration, including Gradle build scripts and AndroidManifest.xml.
+
+  2. ios/: Contains the iOS-specific code and configuration files.
+    - Uses: Manages the iOS platform integration, including Xcode project files and Info.plist.
+
+  3. lib/: Contains the Dart code for the application.
+    - Uses: Main directory for writing Flutter application code, including main.dart which is the entry point of the app.
+
+  4. test/: Contains the unit and widget test files.
+    - Uses: Used for writing tests to ensure the correctness of the application.
+
+  5. build/: Generated automatically when the project is built.
+    - Uses: Contains the output files of the build process.
+
+  6. pubspec.yaml: Defines the project's dependencies and metadata.
+    - Uses: Manages the project's dependencies, assets, and other configurations.
+
+  7. pubspec.lock: Records the exact versions of the dependencies used.
+    - Uses: Ensures consistent builds by locking the dependency versions.
+
+  8. .gitignore: Specifies files and directories to be ignored by Git.
+    - Uses: Prevents unnecessary files from being tracked by version control.
+
+  9. README.md: Provides an overview and instructions for the project.
+    - Uses: Contains documentation and instructions for developers and users.
+
+  10. .metadata: Contains metadata about the project.
+     - Uses: Used internally by Flutter tools to manage the project.
+
+  11. .packages: Maps package names to their locations.
+     - Uses: Used by the Dart VM to locate package dependencies.
+
+  12. analysis_options.yaml: Configures the Dart analyzer.
+     - Uses: Defines linting rules and analysis options for the project.
+
+How Programming Languages Work:
+
+    1. Source Code:
+      - The human-readable code written by the programmer in a high-level programming language (e.g., Dart, Python, Java).
+
+    2. Compilation/Interpretation:
+      - Compilation: The source code is translated into machine code (binary code) by a compiler before execution. Examples include C, C++, and Dart (in AOT mode).
+      - Interpretation: The source code is translated into machine code at runtime by an interpreter. Examples include Python, JavaScript, and Dart (in JIT mode).
+
+    3. Machine Code:
+      - The low-level code that the computer's CPU can execute directly. It consists of binary instructions specific to the CPU architecture.
+
+    4. Execution:
+      - The CPU executes the machine code instructions to perform the tasks specified by the original source code.
+
+    5. Runtime Environment:
+      - Some languages require a runtime environment (e.g., Java Virtual Machine for Java, Dart VM for Dart) to manage execution, memory, and other system resources.
+
+    6. Libraries and Frameworks:
+      - Pre-written code that developers can use to perform common tasks, reducing the need to write code from scratch.
+
+    7. Development Tools:
+      - Tools such as Integrated Development Environments (IDEs), debuggers, and version control systems that assist in writing, testing, and maintaining code.
+
+    8. Optimization:
+      - Techniques used by compilers and interpreters to improve the performance and efficiency of the generated machine code.
+
+    9. Error Handling:
+      - Mechanisms to detect, report, and handle errors that occur during compilation, interpretation, or execution.
+
+    10. Concurrency:
+       - Support for executing multiple tasks simultaneously, either through multi-threading or asynchronous programming.
+
+    Understanding these components helps in grasping how programming languages enable developers to create software that can be executed by computers.
+
+Const vs Final:
+
+  -> In Dart, both const and final are used to declare variables that cannot be reassigned. However, there are key differences between them:
+
+  -> final:
+
+    -> A final variable can only be set once and is initialized when accessed.
+    -> It can be used for variables that are determined at runtime.
+
+  -> const:
+
+    -> A const variable is a compile-time constant and is initialized at compile time.
+    -> It must be assigned a constant value.
+
+  -> In summary:
+
+    -> Use final when the value is determined at runtime and should not change.
+    -> Use const when the value is known at compile time and will never change.
+
+Flutter-Dart Terminology:
+
+  -> runApp():
+
+    -> runApp() is a top-level function that takes a Widget and makes it the root of the widget tree. In this case, the widget is MaterialApp.
+
+  -> MaterialApp():
+
+    -> MaterialApp is a widget that configures the top-level Navigator to search for routes in the following order: For the given route name, if the route's settings.name is present in the routes table, the associated WidgetBuilder is used to build the route's content. 
+    -> If the route's settings.name is not present in the routes table, the onGenerateRoute callback is called, if provided. 
+    -> If onGenerateRoute returns a non-null value, then the value is used to build the route's content. 
+    -> If onGenerateRoute returns null, then onUnknownRoute is called. If onUnknownRoute is provided, then its return value is used to build the content. If onUnknownRoute is not provided, or if it returns null, then a default MaterialPageRoute is used to display the route.
+
+  -> Scaffold():
+
+    -> Scaffold is a material design layout structure that provides a framework for implementing the basic material design layout structure. It provides APIs for showing drawers, snack bars, and bottom sheets. 
+    -> It also provides APIs for handling the app bar, bottom navigation, floating action button, and persistent footer buttons. 
+    -> The Scaffold widget is a top-level container for the app's UI, and it provides a canvas for the app's body. The Scaffold widget is used to create a visual structure for the app's layout.
+
