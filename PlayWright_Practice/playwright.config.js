@@ -78,33 +78,30 @@
 // });
 
 // @ts-check
-const { devices } = require("@playwright/test");
-const { channel } = require("diagnostics_channel");
+const { defineConfig, devices } = require("@playwright/test");
 
 /**
  * @see https://playwright.dev/docs/test-configuration
  */
+// module.exports = defineConfig({
 const config = {
   testDir: "./tests",
-  testMatch: "**/*.spec.js", // Ensure this matches your test file names
-
-  timeout: 30 * 1000,
-  expect: {
-    timeout: 5000,
-  },
-
+  /* Reporter to use. See https://playwright.dev/docs/test-reporters */
   reporter: "html",
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
-  name: "Google Chrome",
   use: {
     /* Base URL to use in actions like `await page.goto('/')`. */
     // baseURL: 'http://127.0.0.1:3000',
+    timeout: 4 * 1000,
+    expect: {
+      timeout: 5000,
+    },
 
-    /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
-    trace: "on-first-retry",
+    browserName: "chromium",
 
-    channel: "chrome",
     headless: false,
+    /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
+    // trace: "on-first-retry",
   },
 };
 

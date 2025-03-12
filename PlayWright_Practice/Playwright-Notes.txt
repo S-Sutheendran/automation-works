@@ -4,7 +4,7 @@ Step 2: Take the Nodejs path installed in the "Program Files" and add it to envi
 
 Step 3: npm init playwright - This is the first step where we create a playwright automation modules
 
---->Questions:
+---> Questions:
 
 1. Do you want to use TypeScript or JavaScript? - JavaScript (As TypeScript does not have much difference compared to JavaScript)
 2. Where to put your end-to-end tests? - tests (This is the default path to put the tests which is fine)
