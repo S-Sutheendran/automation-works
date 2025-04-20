@@ -42,3 +42,257 @@ You can start a new Django project by running:
 
 Replace projectname with the name of your project.
 
+Django Folder Structure:
+
+projectname/
+├── manage.py
+├── projectname/
+│   ├── __init__.py
+│   ├── asgi.py
+│   ├── settings.py
+│   ├── urls.py
+│   └── wsgi.py
+└── appname/
+    ├── migrations/
+    │   └── __init__.py
+    ├── __init__.py
+    ├── admin.py
+    ├── apps.py
+    ├── models.py
+    ├── tests.py
+    └── views.py
+
+1️⃣ Top-Level Folder (Project Root):
+
+-> manage.py:
+----> A command-line utility for interacting with the project.
+----> Allows you to perform tasks like starting the development server, creating migrations, and running tests.
+
+--> Example usage:
+----->python manage.py runserver
+
+2️⃣ Project Folder (projectname/)
+This folder contains the core settings and configurations for your project.
+
+-> __init__.py:
+----> An empty file that makes this folder a Python package.
+
+-> settings.py:
+----> Central configuration file for your project.
+----> Includes database settings, installed apps, middleware, and more.
+
+-> urls.py:
+----> Defines URL patterns for your project.
+----> Routes incoming HTTP requests to the appropriate views.
+
+-> wsgi.py:
+----> Entry point for WSGI-compatible web servers to serve your project.
+----> Used in production environments.
+
+-> asgi.py:
+----> Entry point for ASGI-compatible servers for asynchronous support.
+----> Enables WebSockets and other async features.
+
+3️⃣ App Folder (appname/)
+When you create a new app using the command python manage.py startapp appname, a folder structure like this is generated:
+
+-> migrations/:
+----> Stores migration files to keep track of database changes.
+----> __init__.py makes this directory a Python package.
+
+-> __init__.py:
+----> Makes the app folder a Python package.
+
+-> admin.py:
+----> Used to register models with the Django admin interface.
+
+-> apps.py:
+----> Configuration for the app.
+
+-> models.py:
+----> Defines the database schema using Python classes.
+----> Each class represents a table in the database.
+
+-> tests.py:
+----> Contains test cases for the app.
+
+-> views.py:
+----> Contains functions or classes that handle HTTP requests and return HTTP responses.
+
+4️⃣ Additional Notes
+
+-> Static Files:
+----> These are non-Python files like CSS, JavaScript, and images.
+----> Place them in an app's static/ folder or a central static/ folder.
+
+-> Templates:
+----> HTML templates for rendering views.
+----> Typically stored in a templates/ folder within an app or at the project level.
+
+-> Database:
+----> By default, Django uses SQLite (db.sqlite3), which appears in the root directory after migrations are applied.
+
+-> Example for a Typical App Workflow:
+----> Define database models in models.py.
+----> Create views to process requests in views.py.
+----> Map views to URLs in urls.py.
+----> Add admin configurations in admin.py.
+----> Use templates for frontend rendering.
+
+--> python .\manage.py runserver = This command will help to run local server for preview of our changes
+
+--> Django create many modules and folders which are called as apps
+----> python manage.py startapp challenges
+
+Project to App Relation:
+
+--> Project = Google
+--> App = Google Map, Google Music, Google Search, YouTube etc.
+
+Explanation of the file structures:
+
+1. migrations/
+-->This folder stores migration files for managing changes to the database schema.
+
+--> __init__.py:
+---->Marks the folder as a Python package.
+----> Required for migrations to function properly.
+
+--> Migration files are generated automatically using makemigrations. Example of a migration file:
+----> 0001_initial.py
+----> It contains the schema changes in Python code.
+
+2. __init__.py
+--> Marks the app folder as a Python package.
+--> It is an empty file but essential for the app to be recognized as part of the project.
+
+3. admin.py
+
+--> Used to register models for the Django Admin interface.
+--> Example:
+
+from django.contrib import admin
+from .models import MyModel
+
+admin.site.register(MyModel)
+
+4. apps.py
+--> Contains the app configuration class.
+--> Example:
+
+from django.apps import AppConfig
+
+class AppnameConfig(AppConfig):
+    default_auto_field = 'django.db.models.BigAutoField'
+    name = 'appname'
+
+5. models.py
+--> Defines the database schema by creating models.
+--> Each model is a Python class that represents a table in the database.
+--> Example:
+
+from django.db import models
+
+class MyModel(models.Model):
+    name = models.CharField(max_length=100)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+6. tests.py
+--> Contains test cases for the app.
+--> Used to ensure the app works as expected.
+--> Example:
+
+from django.test import TestCase
+
+class MyTestCase(TestCase):
+    def test_example(self):
+        self.assertEqual(1 + 1, 2)
+
+7. views.py
+--> Contains logic for processing HTTP requests and returning responses.
+--> Views can be function-based or class-based.
+--> Example (Function-Based View):
+
+from django.http import HttpResponse
+
+def home(request):
+    return HttpResponse("Hello, World!")
+
+--> Example (Class-Based View):
+
+from django.views import View
+from django.http import HttpResponse
+
+class HomeView(View):
+    def get(self, request):
+        return HttpResponse("Hello, World!")
+
+Additional Files/Folders to Add
+
+Django doesn’t generate these files automatically, but they are commonly added:
+
+8. urls.py
+--> Used to define URL patterns specific to the app.
+--> You need to create this file manually.
+--> Example:
+
+from django.urls import path
+from . import views
+
+urlpatterns = [
+    path('', views.home, name='home'),
+]
+
+9. static/
+--> Folder for storing static files like CSS, JavaScript, and images.
+--> Example folder structure:
+
+appname/
+└── static/
+    └── appname/
+        ├── css/
+        │   └── styles.css
+        ├── js/
+        │   └── scripts.js
+        └── images/
+            └── logo.png
+
+10. templates/
+--> Folder for storing HTML templates.
+--> Example folder structure:
+
+appname/
+└── templates/
+    └── appname/
+        └── home.html
+
+11. forms.py
+--> Used for creating forms based on Django’s form classes.
+--> Example:
+
+from django import forms
+
+class MyForm(forms.Form):
+    name = forms.CharField(max_length=100)
+
+Final App Folder Structure with Additional Files
+
+appname/
+├── migrations/
+│   └── __init__.py
+├── static/
+│   └── appname/
+│       ├── css/
+│       ├── js/
+│       └── images/
+├── templates/
+│   └── appname/
+│       └── home.html
+├── __init__.py
+├── admin.py
+├── apps.py
+├── forms.py
+├── models.py
+├── tests.py
+├── urls.py
+└── views.py
