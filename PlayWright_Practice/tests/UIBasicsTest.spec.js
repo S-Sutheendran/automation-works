@@ -1,4 +1,5 @@
 const { test, expect } = require("@playwright/test");
+const { domainToUnicode } = require("url");
 
 test("First PlayWright Test", async ({ browser }) => {
   // PlayWright Automation Code
@@ -34,6 +35,7 @@ test("First PlayWright Test", async ({ browser }) => {
   //Clear the Username and then add
   await user_name.fill(""); // This will clear the text box content
   await user_name.fill("rahulshettyacademy");
+  await password.fill("learning");
   await signin_button.click();
 
   //Product Dashboard
@@ -53,4 +55,57 @@ test("Page PlayWright Test with Page Fixture", async ({ page }) => {
 
   // Assertions
   await expect(page).toHaveTitle("Google");
+});
+
+test("UI Controls Testing", async ({ page }) => {
+  const user_name = page.locator("#username");
+  const password = page.locator("[name = 'password']");
+  const signin_button = page.locator("#signInBtn");
+  const dropdown_value = page.locator("select.form-control");
+  const radio_button = page.locator(".radiotextsty");
+  const check_box = page.locator("#terms");
+  const document_link = page.locator("[href *= 'documents-request']");
+
+  await page.goto("https://rahulshettyacademy.com/loginpagePractise/");
+
+  await user_name.fill("rahulshettyacademy");
+  await password.fill("learning");
+  await dropdown_value.selectOption("Consultant");
+  // await page.pause();
+  await radio_button.nth(1).click();
+  await page.locator("#okayBtn").click();
+  await check_box.click();
+
+  //Assertion on Radio button
+  await expect(radio_button.last()).toBeChecked();
+  await expect(check_box).toBeChecked();
+  await check_box.uncheck();
+  expect(await check_box.isChecked()).toBeFalsy();
+
+  //Blinking Text for Link
+  await expect(document_link).toHaveAttribute("class", "blinkingText");
+
+  await signin_button.click();
+});
+
+//Clicking & Verifying the text in child window
+test("Child Window Handling", async ({ browser }) => {
+  const context = await browser.newContext();
+  const page = await context.newPage();
+
+  await page.goto("https://rahulshettyacademy.com/loginpagePractise/");
+
+  const document_link = page.locator("[href *= 'documents-request']");
+  const [newPage] = await Promise.all([
+    context.waitForEvent("page"), //Listen for any new page
+    document_link.click(),
+  ]); //New page is opened
+  const red_text = await newPage.locator(".red").textContent();
+  console.log(red_text);
+  const split_text = red_text.split("@");
+  console.log(split_text[1]);
+  const domain_name = split_text[1].split(" ")[0];
+  console.log(domain_name);
+
+  await page.locator("#username").fill(domain_name);
 });
