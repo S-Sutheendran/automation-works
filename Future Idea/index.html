@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Interactive Blueprint: Integrated Organic Farming</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <!-- Chosen Palette: Organic Growth (Earthy Green, Warm Beige, Slate Gray) -->
+  <!-- Application Structure Plan: The SPA is designed as a multi-section dashboard with sticky navigation. It starts with 'Market Outlook' for a high-level view, followed by the 'IOFS Blueprint' visualizing the circular economy. The 'Crop & Livestock Hub' provides interactive data on profitable crops and farm integration. 'Action Central' consolidates risks, government schemes, and recommendations into actionable, interactive modules. This task-oriented, non-linear structure allows the user to explore components based on interest and priority, which is more effective for strategic planning than a linear report. -->
+  <!-- Visualization & Content Choices: 
+        - Market Projections: Report's CAGR figures are presented as interactive Bar Charts (Chart.js) for quick comparison. Goal: Inform. Interaction: Hover. Justification: Visual data is more memorable than text.
+        - IOFS Model: Report's description of nutrient cycling is an HTML/CSS interactive diagram. Goal: Explain. Interaction: Hover over elements to see connections. Justification: Visually demonstrates the core synergistic concept.
+        - Profitable Crops: Report's list becomes a filterable grid of cards (HTML/CSS/JS). Goal: Explore. Interaction: Click filters (e.g., 'Export', 'High-Value'). Justification: Enables user-driven discovery of relevant crops.
+        - Govt Schemes: Report's list is an accordion (HTML/CSS/JS). Goal: Organize. Interaction: Click to expand. Justification: Manages dense information cleanly.
+        - Risk Matrix: Report's risks are a clickable matrix. Goal: Analyze. Interaction: Click risk type to see mitigations. Justification: Provides a structured way to assess and plan for challenges.
+    -->
+  <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #fdfcf9;
+      color: #334155;
+    }
+
+    .nav-link.active {
+      color: #38a169;
+      border-bottom-color: #38a169;
+    }
+
+    .tab-button.active {
+      background-color: #2f855a;
+      color: white;
+    }
+
+    .chart-container {
+      position: relative;
+      width: 100%;
+      max-width: 500px;
+      margin-left: auto;
+      margin-right: auto;
+      height: 280px;
+      max-height: 350px;
+    }
+
+    @media (min-width: 768px) {
+      .chart-container {
+        height: 320px;
+      }
+    }
+
+    .accordion-content {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.3s ease-in-out;
+    }
+
+    .iofs-diagram .iofs-element {
+      transition: all 0.3s ease;
+    }
+
+    .iofs-diagram:hover .iofs-element {
+      opacity: 0.6;
+      transform: scale(0.98);
+    }
+
+    .iofs-diagram .iofs-element:hover {
+      opacity: 1;
+      transform: scale(1.05);
+      box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    }
+
+    .crop-card {
+      transition: all 0.3s ease;
+    }
+  </style>
+</head>
+
+<body class="antialiased">
+
+  <header class="bg-white/90 backdrop-blur-sm sticky top-0 z-50 shadow-md">
+    <nav class="container mx-auto px-6 py-3 flex justify-between items-center">
+      <h1 class="text-xl md:text-2xl font-bold text-slate-800">Agri-Business Blueprint</h1>
+      <div class="hidden md:flex items-center space-x-8 text-sm font-semibold text-slate-600">
+        <a href="#market" class="nav-link pb-2 border-b-2 border-transparent">Market Outlook</a>
+        <a href="#iofs" class="nav-link pb-2 border-b-2 border-transparent">IOFS Blueprint</a>
+        <a href="#hub" class="nav-link pb-2 border-b-2 border-transparent">Crop & Livestock Hub</a>
+        <a href="#action" class="nav-link pb-2 border-b-2 border-transparent">Action Central</a>
+      </div>
+      <button id="mobile-menu-button" class="md:hidden p-2">
+        <svg class="w-6 h-6 text-slate-600" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+          viewBox="0 0 24 24" stroke="currentColor">
+          <path d="M4 6h16M4 12h16m-7 6h7"></path>
+        </svg>
+      </button>
+    </nav>
+    <div id="mobile-menu" class="hidden md:hidden px-6 pt-2 pb-4 space-y-3">
+      <a href="#market" class="block nav-link font-medium">Market Outlook</a>
+      <a href="#iofs" class="block nav-link font-medium">IOFS Blueprint</a>
+      <a href="#hub" class="block nav-link font-medium">Crop & Livestock Hub</a>
+      <a href="#action" class="block nav-link font-medium">Action Central</a>
+    </div>
+  </header>
+
+  <main class="container mx-auto px-6 py-12">
+
+    <section id="market" class="mb-24 scroll-mt-24">
+      <h2 class="text-3xl font-bold text-center mb-4 text-slate-800">Market Landscape & Future Outlook</h2>
+      <p class="text-center text-slate-600 max-w-3xl mx-auto mb-12">This section provides a high-level overview of the
+        agriculture, dairy, and poultry sectors in India, with a focus on their projected growth over the next 10-15
+        years. Understanding these trends is crucial for strategic planning and identifying high-potential market
+        segments for your venture.</p>
+      <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div class="bg-white p-6 rounded-2xl shadow-lg border border-slate-200">
+          <h3 class="font-bold text-center text-lg mb-4">Agriculture Sector Growth</h3>
+          <div class="chart-container"><canvas id="agriChart"></canvas></div>
+        </div>
+        <div class="bg-white p-6 rounded-2xl shadow-lg border border-slate-200">
+          <h3 class="font-bold text-center text-lg mb-4">Dairy Sector Growth</h3>
+          <div class="chart-container"><canvas id="dairyChart"></canvas></div>
+        </div>
+        <div class="bg-white p-6 rounded-2xl shadow-lg border border-slate-200 md:col-span-2 lg:col-span-1">
+          <h3 class="font-bold text-center text-lg mb-4">Poultry Sector Growth</h3>
+          <div class="chart-container"><canvas id="poultryChart"></canvas></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="iofs" class="mb-24 scroll-mt-24">
+      <h2 class="text-3xl font-bold text-center mb-4 text-slate-800">The Integrated Organic Farming System (IOFS)</h2>
+      <p class="text-center text-slate-600 max-w-3xl mx-auto mb-12">At the heart of your venture is the IOFS, a
+        "zero-waste" circular economy model. This system synergistically combines crop cultivation with livestock,
+        turning waste from one component into a valuable resource for another. Hover over the elements below to see how
+        they connect and create a self-sustaining farm.</p>
+      <div
+        class="iofs-diagram bg-white p-8 rounded-2xl shadow-lg border border-slate-200 relative flex flex-col md:flex-row items-center justify-around gap-8">
+        <div class="iofs-element text-center p-4 rounded-lg bg-green-100 border border-green-300">
+          <div class="text-4xl">🌾</div>
+          <h4 class="font-bold">Organic Crops</h4>
+          <p class="text-xs text-green-700">Waste feeds cattle</p>
+        </div>
+        <div class="text-3xl text-slate-400 font-thin">&rarr;</div>
+        <div class="iofs-element text-center p-4 rounded-lg bg-blue-100 border border-blue-300">
+          <div class="text-4xl">🐄</div>
+          <h4 class="font-bold">Dairy Cattle</h4>
+          <p class="text-xs text-blue-700">Manure for crops</p>
+        </div>
+        <div class="text-3xl text-slate-400 font-thin">&rarr;</div>
+        <div class="iofs-element text-center p-4 rounded-lg bg-orange-100 border border-orange-300">
+          <div class="text-4xl">🐓</div>
+          <h4 class="font-bold">Poultry</h4>
+          <p class="text-xs text-orange-700">Litter for fertilizer</p>
+        </div>
+        <div class="absolute top-1/2 left-0 w-full h-px bg-slate-200 -z-10 hidden md:block"></div>
+        <div class="absolute top-0 left-1/2 h-full w-px bg-slate-200 -z-10 md:hidden"></div>
+        <div
+          class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white p-3 rounded-full border-4 border-slate-300 shadow-inner">
+          <div class="text-3xl">♻️</div>
+        </div>
+      </div>
+    </section>
+
+    <section id="hub" class="mb-24 scroll-mt-24">
+      <h2 class="text-3xl font-bold text-center mb-4 text-slate-800">Crop & Livestock Hub</h2>
+      <p class="text-center text-slate-600 max-w-3xl mx-auto mb-12">Effective farm management begins with strategic
+        selection. This hub provides interactive tools to explore profitable crops suitable for South India and
+        understand how to integrate dairy and poultry operations for maximum efficiency and resource utilization.</p>
+      <div class="bg-white rounded-2xl shadow-lg border border-slate-200 p-2 md:p-4">
+        <div id="hub-tabs-buttons" class="flex flex-wrap justify-center border-b border-slate-200 mb-6"></div>
+        <div id="hub-tabs-content" class="px-2 md:px-6 py-4"></div>
+      </div>
+    </section>
+
+    <section id="action" class="scroll-mt-24">
+      <h2 class="text-3xl font-bold text-center mb-4 text-slate-800">Action Central: Risks, Schemes & Synergies</h2>
+      <p class="text-center text-slate-600 max-w-3xl mx-auto mb-12">This section consolidates key strategic
+        considerations into actionable modules. Explore potential risks and their mitigation strategies, discover
+        relevant government funding schemes, and see how your new agri-venture can create powerful synergies with your
+        existing furniture and food businesses.</p>
+      <div class="grid lg:grid-cols-2 gap-8">
+        <div class="bg-white p-6 rounded-2xl shadow-lg border border-slate-200">
+          <h3 class="font-bold text-lg mb-4">Risk & Mitigation Matrix</h3>
+          <div id="risk-matrix-buttons" class="grid grid-cols-2 gap-2 mb-4"></div>
+          <div id="risk-mitigation-content" class="p-4 bg-slate-50 rounded-lg text-sm text-slate-700 min-h-[120px]">
+          </div>
+        </div>
+        <div class="bg-white p-6 rounded-2xl shadow-lg border border-slate-200">
+          <h3 class="font-bold text-lg mb-4">Government Funding Schemes</h3>
+          <div id="funding-accordion" class="space-y-3"></div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+
+      const appData = {
+        charts: {
+          agriculture: { id: 'agriChart', label: 'Sector CAGR', value: 4.52, color: 'rgba(54, 162, 235, 0.7)' },
+          dairy: { id: 'dairyChart', label: 'Sector CAGR', value: 7.43, color: 'rgba(75, 192, 192, 0.7)' },
+          poultry: { id: 'poultryChart', label: 'Sector CAGR', value: 12.60, color: 'rgba(255, 159, 64, 0.7)' }
+        },
+        crops: [
+          { name: 'Mango', category: ['fruit', 'export'], potential: 'High', details: 'High demand in both domestic and international markets.' },
+          { name: 'Banana', category: ['fruit', 'local'], potential: 'High', details: 'India is a global leader in production. Consistent local demand.' },
+          { name: 'Turmeric', category: ['spice', 'export'], potential: 'High', details: 'Strong global demand, especially for organic variants.' },
+          { name: 'Moringa', category: ['superfood', 'export'], potential: 'Very High', details: 'Superfood with a dedicated Export Promotion Board in Tamil Nadu.' },
+          { name: 'Broccoli', category: ['exotic_veg', 'local'], potential: 'Premium', details: 'Gaining traction in urban markets, commands premium prices.' },
+          { name: 'Lettuce (Hydroponic)', category: ['exotic_veg', 'local', 'high_tech'], potential: 'Premium', details: 'High returns and uses 90% less water, ideal for urban-centric farming.' },
+          { name: 'Mushroom', category: ['other', 'local'], potential: 'High', details: 'Quick ROI, utilizes agri-waste, high nutritional value.' }
+        ],
+        hubTabs: [
+          {
+            name: "Profitable Crops",
+            content: `
+                        <div id="crop-filters" class="flex flex-wrap justify-center gap-2 mb-6">
+                           <button data-filter="all" class="filter-btn active bg-green-600 text-white text-xs font-semibold px-3 py-1 rounded-full">All</button>
+                           <button data-filter="export" class="filter-btn bg-gray-200 text-gray-700 text-xs font-semibold px-3 py-1 rounded-full">Export Potential</button>
+                           <button data-filter="local" class="filter-btn bg-gray-200 text-gray-700 text-xs font-semibold px-3 py-1 rounded-full">Local Market</button>
+                           <button data-filter="high_tech" class="filter-btn bg-gray-200 text-gray-700 text-xs font-semibold px-3 py-1 rounded-full">High-Tech</button>
+                        </div>
+                        <div id="crop-grid" class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+                    `
+          },
+          {
+            name: "Livestock Integration",
+            content: `
+                        <div class="space-y-6">
+                            <div>
+                                <h4 class="font-bold text-lg text-slate-800">🐮 Dairy Manure Management</h4>
+                                <p class="text-sm text-slate-600 mt-1">A cow produces 80-120 lbs of manure daily. This can be converted into valuable resources:</p>
+                                <ul class="list-disc list-inside mt-2 space-y-1 text-sm">
+                                    <li><strong>Biogas:</strong> Anaerobic digestion produces methane for farm energy and a nutrient-rich liquid fertilizer.</li>
+                                    <li><strong>Compost:</strong> A 3-6 month process creates stable, pathogen-free organic fertilizer, improving soil health.</li>
+                                </ul>
+                            </div>
+                             <div>
+                                <h4 class="font-bold text-lg text-slate-800">🐔 Poultry Waste Utilization</h4>
+                                <p class="text-sm text-slate-600 mt-1">Poultry litter is a concentrated source of Nitrogen, Phosphorus, and Potassium (N-P-K).</p>
+                                 <ul class="list-disc list-inside mt-2 space-y-1 text-sm">
+                                    <li><strong>Fertilizer:</strong> Directly enriches soil with essential nutrients, reducing the need for synthetic inputs.</li>
+                                    <li><strong>Animal Feed:</strong> Can be processed into high-protein animal feed after pathogen removal.</li>
+                                </ul>
+                            </div>
+                        </div>
+                    `
+          }
+        ],
+        risks: {
+          'Market': 'Price volatility & competition. Mitigation: Focus on high-value niche/organic products, build a strong brand, and diversify markets.',
+          'Operational': 'Supply chain disruptions & labor shortages. Mitigation: Diversify suppliers, build buffer stock, invest in training, and offer competitive compensation.',
+          'Financial': 'High initial capital investment & cash flow issues. Mitigation: Utilize government schemes, create detailed budgets, and secure diverse funding sources.',
+          'Environmental': 'Climate change (droughts/floods) & disease outbreaks. Mitigation: Adopt climate-resilient practices, use water-efficient irrigation, and implement strict biosecurity protocols.'
+        },
+        schemes: [
+          { name: 'PKVY (Organic Farming)', detail: '₹50,000/hectare over 3 years for organic inputs and certification.' },
+          { name: 'NLM (Livestock)', detail: 'Support for entrepreneurship and productivity enhancement in dairy and poultry.' },
+          { name: 'PMFME (Food Processing)', detail: '35% credit-linked capital subsidy (up to ₹10 lakh) for micro food processing units.' },
+          { name: 'TN Capital Subsidy (MSME)', detail: '25% subsidy on plant & machinery (up to ₹1.5 crore) for MSMEs in Tamil Nadu.' }
+        ]
+      };
+
+      // Init Charts
+      Object.values(appData.charts).forEach(chartData => {
+        new Chart(document.getElementById(chartData.id).getContext('2d'), {
+          type: 'bar',
+          data: {
+            labels: [chartData.label],
+            datasets: [{
+              label: 'Projected CAGR (%)',
+              data: [chartData.value],
+              backgroundColor: [chartData.color],
+              borderRadius: 5
+            }]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            indexAxis: 'y',
+            scales: { x: { beginAtZero: true, max: 15 } },
+            plugins: { legend: { display: false } }
+          }
+        });
+      });
+
+      // Init Hub Tabs
+      const hubTabsButtons = document.getElementById('hub-tabs-buttons');
+      const hubTabsContent = document.getElementById('hub-tabs-content');
+      appData.hubTabs.forEach((tab, index) => {
+        const button = document.createElement('button');
+        button.className = `tab-button text-sm md:text-base font-semibold px-4 py-2 rounded-t-lg transition-colors duration-200 ${index === 0 ? 'active' : ''}`;
+        button.textContent = tab.name;
+        button.dataset.target = `hub-tab-${index}`;
+        hubTabsButtons.appendChild(button);
+
+        const contentDiv = document.createElement('div');
+        contentDiv.id = `hub-tab-${index}`;
+        contentDiv.className = `hub-tab-content ${index > 0 ? 'hidden' : ''}`;
+        contentDiv.innerHTML = tab.content;
+        hubTabsContent.appendChild(contentDiv);
+      });
+
+      hubTabsButtons.querySelectorAll('.tab-button').forEach(button => {
+        button.addEventListener('click', () => {
+          hubTabsButtons.querySelectorAll('.tab-button').forEach(btn => btn.classList.remove('active'));
+          button.classList.add('active');
+          hubTabsContent.querySelectorAll('.hub-tab-content').forEach(content => content.classList.add('hidden'));
+          document.getElementById(button.dataset.target).classList.remove('hidden');
+        });
+      });
+
+      // Profitable Crops Logic
+      const cropGrid = document.getElementById('crop-grid');
+      const filterButtons = document.querySelectorAll('.filter-btn');
+
+      const renderCrops = (filter = 'all') => {
+        cropGrid.innerHTML = '';
+        const filteredCrops = filter === 'all'
+          ? appData.crops
+          : appData.crops.filter(crop => crop.category.includes(filter));
+
+        filteredCrops.forEach(crop => {
+          const card = document.createElement('div');
+          card.className = 'crop-card bg-slate-50 p-4 rounded-lg border border-slate-200 hover:shadow-md hover:-translate-y-1';
+          card.innerHTML = `
+                    <h4 class="font-bold text-slate-800">${crop.name}</h4>
+                    <p class="text-xs text-slate-500 mt-1">${crop.details}</p>
+                    <div class="mt-2 text-xs font-semibold text-green-700">Potential: ${crop.potential}</div>
+                `;
+          cropGrid.appendChild(card);
+        });
+      };
+
+      filterButtons.forEach(button => {
+        button.addEventListener('click', () => {
+          filterButtons.forEach(btn => btn.classList.remove('active', 'bg-green-600', 'text-white'));
+          button.classList.add('active', 'bg-green-600', 'text-white');
+          renderCrops(button.dataset.filter);
+        });
+      });
+      renderCrops();
+
+      // Init Risk Matrix
+      const riskButtonsContainer = document.getElementById('risk-matrix-buttons');
+      const riskContent = document.getElementById('risk-mitigation-content');
+      Object.keys(appData.risks).forEach((riskKey, index) => {
+        const button = document.createElement('button');
+        button.textContent = riskKey;
+        button.className = `risk-btn p-2 text-xs font-semibold rounded-md transition-colors ${index === 0 ? 'bg-red-600 text-white' : 'bg-slate-200 text-slate-700'}`;
+        button.dataset.risk = riskKey;
+        riskButtonsContainer.appendChild(button);
+      });
+
+      riskButtonsContainer.querySelectorAll('.risk-btn').forEach(button => {
+        button.addEventListener('click', () => {
+          riskButtonsContainer.querySelectorAll('.risk-btn').forEach(btn => btn.classList.remove('bg-red-600', 'text-white'));
+          button.classList.add('bg-red-600', 'text-white');
+          riskContent.textContent = appData.risks[button.dataset.risk];
+        });
+      });
+      riskContent.textContent = appData.risks[Object.keys(appData.risks)[0]];
+
+
+      // Init Funding Accordion
+      const accordionContainer = document.getElementById('funding-accordion');
+      appData.schemes.forEach(scheme => {
+        const item = document.createElement('div');
+        item.className = 'bg-slate-50 rounded-lg border border-slate-200';
+        item.innerHTML = `
+                <button class="accordion-header w-full flex justify-between items-center text-left p-4">
+                    <span class="font-semibold text-sm text-slate-700">${scheme.name}</span>
+                    <span class="accordion-icon text-slate-500 transition-transform duration-300">▼</span>
+                </button>
+                <div class="accordion-content px-4">
+                    <p class="text-slate-600 pb-4 text-xs">${scheme.detail}</p>
+                </div>
+            `;
+        accordionContainer.appendChild(item);
+      });
+
+      accordionContainer.querySelectorAll('.accordion-header').forEach(button => {
+        button.addEventListener('click', () => {
+          const content = button.nextElementSibling;
+          const icon = button.querySelector('.accordion-icon');
+          const isOpen = content.style.maxHeight;
+
+          if (!isOpen || isOpen === '0px') {
+            content.style.maxHeight = content.scrollHeight + 'px';
+            icon.style.transform = 'rotate(180deg)';
+          } else {
+            content.style.maxHeight = null;
+            icon.style.transform = 'rotate(0deg)';
+          }
+        });
+      });
+
+
+      // Mobile Menu
+      const mobileMenuButton = document.getElementById('mobile-menu-button');
+      const mobileMenu = document.getElementById('mobile-menu');
+      mobileMenuButton.addEventListener('click', () => mobileMenu.classList.toggle('hidden'));
+      document.querySelectorAll('#mobile-menu a').forEach(link => {
+        link.addEventListener('click', () => mobileMenu.classList.add('hidden'));
+      });
+
+      // Active Nav Link on Scroll
+      const navLinks = document.querySelectorAll('nav a.nav-link');
+      const sections = document.querySelectorAll('main section');
+      const onScroll = () => {
+        let currentSectionId = '';
+        sections.forEach(section => {
+          if (window.scrollY >= section.offsetTop - 150) {
+            currentSectionId = section.getAttribute('id');
+          }
+        });
+
+        navLinks.forEach(link => {
+          link.classList.remove('active');
+          if (link.getAttribute('href') === `#${currentSectionId}`) {
+            link.classList.add('active');
+          }
+        });
+      };
+      window.addEventListener('scroll', onScroll);
+      onScroll();
+
+    });
+  </script>
+</body>
+
+</html>

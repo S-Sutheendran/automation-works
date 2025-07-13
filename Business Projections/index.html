@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Interactive Roadmap: Scaling the Hybrid Business</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <!-- Chosen Palette: Corporate Growth (Deep Blue, Slate Gray, Muted Gold Accent) -->
+  <!-- Application Structure Plan: A single-page dashboard with sticky navigation. It starts with a high-level summary, followed by an interactive 10-year timeline to guide users through growth phases. The core strategies are organized into four thematic 'Pillars' (Market, Operations, Tech, People/Finance) in a tabbed interface for focused exploration. It concludes with an interactive checklist of recommendations. This structure transforms the linear report into a non-linear, explorable tool, allowing partners to access information relevant to their roles quickly. -->
+  <!-- Visualization & Content Choices: 
+        - Market Growth: Bar Chart (Chart.js) to visually represent large market size projections. Goal: Inform. Interaction: Hover. Justification: More impactful than text.
+        - 10-Year Roadmap: HTML/CSS Timeline. Goal: Guide. Interaction: Click to expand phase details. Justification: Turns chronological chapters into an interactive journey.
+        - Tech Stack: HTML/CSS Icon Grid. Goal: Organize. Interaction: Hover for descriptions. Justification: Quick, visual summary of complex information.
+        - Funding Schemes: HTML/CSS/JS Accordion. Goal: Explore. Interaction: Click to reveal details. Justification: Presents dense list data in a manageable, user-driven way.
+        - Recommendations: HTML/JS Interactive Checklist. Goal: Action. Interaction: Click to check off items. Justification: Provides a tangible, actionable tool for the partners.
+        - All elements use Chart.js or HTML/CSS/JS. -->
+  <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #f8fafc;
+      color: #334155;
+    }
+
+    .nav-link {
+      transition: all 0.2s ease-in-out;
+      border-bottom: 2px solid transparent;
+    }
+
+    .nav-link:hover,
+    .nav-link.active {
+      color: #c2984b;
+      border-bottom-color: #c2984b;
+    }
+
+    .tab-button.active {
+      background-color: #1e3a8a;
+      color: white;
+    }
+
+    .timeline-item::before {
+      content: '';
+      position: absolute;
+      top: 1rem;
+      left: -0.875rem;
+      width: 1.75rem;
+      height: 1.75rem;
+      background-color: white;
+      border: 4px solid #94a3b8;
+      border-radius: 9999px;
+      z-index: 10;
+    }
+
+    .timeline-item.active::before {
+      border-color: #c2984b;
+      background-color: #fefce8;
+    }
+
+    .timeline-line {
+      position: absolute;
+      top: 1rem;
+      bottom: 0;
+      left: 0;
+      width: 4px;
+      background-color: #e2e8f0;
+    }
+
+    .chart-container {
+      position: relative;
+      width: 100%;
+      max-width: 600px;
+      margin-left: auto;
+      margin-right: auto;
+      height: 300px;
+      max-height: 400px;
+    }
+
+    @media (min-width: 768px) {
+      .chart-container {
+        height: 350px;
+      }
+    }
+
+    .accordion-content {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.3s ease-out;
+    }
+  </style>
+</head>
+
+<body class="antialiased">
+
+  <header class="bg-white/90 backdrop-blur-sm sticky top-0 z-50 shadow-md">
+    <nav class="container mx-auto px-6 py-4 flex justify-between items-center">
+      <h1 class="text-xl md:text-2xl font-bold text-slate-800">Growth Roadmap</h1>
+      <div class="hidden md:flex items-center space-x-8">
+        <a href="#journey" class="nav-link font-medium pb-1">The Journey</a>
+        <a href="#pillars" class="nav-link font-medium pb-1">Core Pillars</a>
+        <a href="#funding" class="nav-link font-medium pb-1">Funding</a>
+        <a href="#actions" class="nav-link font-medium pb-1">Action Plan</a>
+      </div>
+      <button id="mobile-menu-button" class="md:hidden p-2">
+        <svg class="w-6 h-6 text-slate-600" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+          viewBox="0 0 24 24" stroke="currentColor">
+          <path d="M4 6h16M4 12h16m-7 6h7"></path>
+        </svg>
+      </button>
+    </nav>
+    <div id="mobile-menu" class="hidden md:hidden px-6 pt-2 pb-4 space-y-3">
+      <a href="#journey" class="block nav-link font-medium">The Journey</a>
+      <a href="#pillars" class="block nav-link font-medium">Core Pillars</a>
+      <a href="#funding" class="block nav-link font-medium">Funding</a>
+      <a href="#actions" class="block nav-link font-medium">Action Plan</a>
+    </div>
+  </header>
+
+  <main class="container mx-auto px-6 py-12">
+
+    <section id="overview" class="text-center mb-20">
+      <h2 class="text-3xl md:text-4xl font-extrabold text-slate-800 mb-4">Scaling a Hybrid Furniture & Food Business
+      </h2>
+      <p class="max-w-3xl mx-auto text-slate-600 mb-10">An interactive roadmap to transform a small-scale partnership
+        into a significant market player. This dashboard visualizes market opportunities and outlines the strategic
+        journey ahead, focusing on synergistic growth across both business verticals.</p>
+      <div class="grid md:grid-cols-2 gap-8 items-center">
+        <div class="bg-white p-6 rounded-2xl shadow-lg border border-slate-200">
+          <h3 class="font-bold text-xl text-slate-700 mb-3">Core Strength: Partner Synergy</h3>
+          <div class="flex justify-center space-x-4 text-slate-600">
+            <div class="text-center"><span class="text-2xl">📈</span>
+              <p class="text-xs font-semibold">Marketing</p>
+            </div>
+            <div class="text-center"><span class="text-2xl">⚙️</span>
+              <p class="text-xs font-semibold">Operations</p>
+            </div>
+            <div class="text-center"><span class="text-2xl">💻</span>
+              <p class="text-xs font-semibold">Technology</p>
+            </div>
+            <div class="text-center"><span class="text-2xl">🧭</span>
+              <p class="text-xs font-semibold">Management</p>
+            </div>
+          </div>
+        </div>
+        <div class="bg-white p-6 rounded-2xl shadow-lg border border-slate-200">
+          <h3 class="font-bold text-xl text-slate-700 mb-3">Market Opportunity</h3>
+          <div class="chart-container" style="height: 150px; max-height:200px">
+            <canvas id="marketGrowthChart"></canvas>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="journey" class="mb-20 scroll-mt-24">
+      <h2 class="text-3xl font-bold text-center mb-4 text-slate-800">The 10-Year Journey</h2>
+      <p class="text-center text-slate-600 max-w-3xl mx-auto mb-12">The path to market leadership is a multi-phase
+        marathon. This interactive timeline breaks down the 10-year strategy into manageable phases, each with distinct
+        objectives. Click on a phase to explore its key focus areas and strategic initiatives.</p>
+      <div id="timeline-container" class="relative pl-8">
+        <div class="timeline-line"></div>
+      </div>
+    </section>
+
+    <section id="pillars" class="mb-20 scroll-mt-24">
+      <h2 class="text-3xl font-bold text-center mb-4 text-slate-800">Core Pillars of Growth</h2>
+      <p class="text-center text-slate-600 max-w-3xl mx-auto mb-12">Success depends on executing flawlessly across four
+        strategic pillars. Each partner can use this section to deep-dive into their area of expertise, from brand
+        building and operational excellence to technology adoption and financial strategy.</p>
+      <div class="bg-white rounded-2xl shadow-lg border border-slate-200 p-2 md:p-4">
+        <div id="tabs-buttons" class="flex flex-wrap justify-center border-b border-slate-200 mb-6"></div>
+        <div id="tabs-content" class="px-2 md:px-6 py-4"></div>
+      </div>
+    </section>
+
+    <section id="funding" class="mb-20 scroll-mt-24">
+      <h2 class="text-3xl font-bold text-center mb-4 text-slate-800">Funding & Investment Options</h2>
+      <p class="text-center text-slate-600 max-w-3xl mx-auto mb-12">Fueling growth requires strategic financial
+        management. This section details various government schemes available to SMEs in India and Tamil Nadu, providing
+        critical support for capital investment and operational expansion. Click each scheme to learn more.</p>
+      <div id="funding-accordion" class="space-y-4"></div>
+    </section>
+
+    <section id="actions" class="scroll-mt-24">
+      <h2 class="text-3xl font-bold text-center mb-4 text-slate-800">Action Plan & Key Recommendations</h2>
+      <p class="text-center text-slate-600 max-w-3xl mx-auto mb-12">Strategy is nothing without execution. This
+        interactive checklist translates the key recommendations from the report into a tangible action plan. Track your
+        progress as you lay the foundation for sustainable growth and market dominance.</p>
+      <div class="bg-white rounded-2xl shadow-lg border border-slate-200 p-6 md:p-8">
+        <div class="flex items-center justify-between mb-6">
+          <h3 class="font-bold text-lg">Key Recommendations Checklist</h3>
+          <div class="text-right">
+            <span id="progress-text" class="font-bold text-lg text-blue-700">0/10</span>
+            <p class="text-xs text-slate-500">Completed</p>
+          </div>
+        </div>
+        <div class="w-full bg-slate-200 rounded-full h-2.5 mb-6">
+          <div id="progress-bar" class="bg-blue-600 h-2.5 rounded-full" style="width: 0%; transition: width 0.5s ease;">
+          </div>
+        </div>
+        <div id="recommendations-list" class="space-y-4"></div>
+      </div>
+    </section>
+
+  </main>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const appData = {
+        marketGrowth: {
+          labels: ['Furniture Market (by 2032)', 'Food Service Market (by 2034)'],
+          data: [64.1, 154.56]
+        },
+        timeline: [
+          {
+            phase: 'Phase 1',
+            duration: '0-18 Months',
+            title: 'Laying the Foundation',
+            summary: 'Focus on operational efficiency, quality control, and establishing a robust digital presence to achieve product-market fit in Chennai.',
+            details: [
+              'Leverage partner skills in Marketing, Ops, Tech, & Management.',
+              'Define hyper-local Product-Market Fit for furniture & food.',
+              'Standardize processes for quality and efficiency.',
+              'Build an omnichannel digital presence (Website, Social Media, SEO).',
+              'Implement data-driven customer acquisition strategies.'
+            ]
+          },
+          {
+            phase: 'Phase 2',
+            duration: '1.5-5 Years',
+            title: 'Strategic Expansion',
+            summary: 'Diversify markets, build a unified brand, integrate scalable technology, and expand the team with a focus on talent management.',
+            details: [
+              'Diversify product lines and expand geographically (Tier 2/3 cities).',
+              'Build a unified brand narrative (e.g., "sustainable living").',
+              'Adopt a modern tech stack (React, Python, Cloud).',
+              'Transition to a microservices architecture as needed.',
+              'Implement structured talent acquisition and retention plans.'
+            ]
+          },
+          {
+            phase: 'Phase 3',
+            duration: '5-10 Years',
+            title: 'Market Leadership & Innovation',
+            summary: 'Aim for market dominance through continuous innovation, leveraging AI/ML, and exploring synergistic business models like experience centers.',
+            details: [
+              'Achieve market leadership in the niche.',
+              'Integrate AI/ML for demand forecasting and personalization.',
+              'Fully adopt a cloud-native, serverless architecture.',
+              'Develop hybrid retail "experience centers".',
+              'Optimize supply chain with advanced tech (IoT, Blockchain).',
+              'Foster strategic partnerships to build an ecosystem.'
+            ]
+          }
+        ],
+        pillars: [
+          {
+            name: 'Market & Brand',
+            icon: '📈',
+            content: {
+              'Product-Market Fit': 'Deep-dive into Chennai-specific preferences for both furniture (modular, sustainable) and food (regional, healthy). Explore hybrid models like an in-store cafe to create a unique value proposition.',
+              'Digital Presence': 'Develop a seamless "phygital" experience. Use online channels for discovery and physical showrooms for tactile interaction. Leverage data from both business segments for personalized marketing.',
+              'Brand Building': 'Create a unified brand narrative that highlights the synergy between furniture and food. Use digital storytelling to build brand authority and trust. Implement omnichannel loyalty programs.'
+            }
+          },
+          {
+            name: 'Operations & Supply Chain',
+            icon: '⚙️',
+            content: {
+              'Operational Efficiency': 'Standardize and document all core processes for furniture production and food preparation. Automate repetitive tasks to prevent quality dilution and control costs during scaling.',
+              'Quality Control': 'Implement a unified quality management framework. For food, this means strict adherence to safety regulations. For furniture, focus on material quality, craftsmanship, and durability.',
+              'Supply Chain': 'Diversify suppliers (local and global mix) to mitigate risks. Build inventory buffers and leverage technology for real-time monitoring and demand forecasting.'
+            }
+          },
+          {
+            name: 'Technology & Innovation',
+            icon: '💻',
+            content: {
+              'Recommended Tech Stack': 'React.js (Frontend), Python with FastAPI/Django (Backend), PostgreSQL (SQL DB), MongoDB (NoSQL DB), Redis (Caching). This provides a flexible, scalable foundation for both business lines.',
+              'Cloud & DevOps': 'Prioritize a cloud-native approach (AWS/GCP/Azure) with CI/CD pipelines (Jenkins/GitHub Actions). Use Docker for containerization and Kubernetes for orchestration to ensure scalable and efficient deployment.',
+              'Future Innovation': 'Begin with a modular monolith, transitioning to microservices for high-growth functions. In the long-term, integrate AI/ML for predictive analytics, personalization, and operational automation.'
+            }
+          },
+          {
+            name: 'People & Finance',
+            icon: '🧭',
+            content: {
+              'Talent Management': 'Offer competitive compensation and benefits. Foster a positive work environment with clear career progression paths. Invest in continuous learning and mentorship to retain top talent.',
+              'Cross-Functional Collaboration': 'Encourage open communication and use shared project management tools. Promote cross-departmental learning to break down silos and foster innovation.',
+              'Financial Strategy': 'Implement robust budgeting and debt management. Strategically explore government funding schemes for capital. Diversify funding sources as the business scales.'
+            }
+          }
+        ],
+        fundingSchemes: [
+          { name: 'Pradhan Mantri MUDRA Yojana (PMMY)', detail: 'Offers loans up to ₹10 lakh for micro/small enterprises with flexible repayment.' },
+          { name: 'MSME Loan in 59 Minutes', detail: 'Provides in-principle approval for loans from ₹1 lakh to ₹5 crore.' },
+          { name: 'MOFPI Subsidy (for Food Processing)', detail: 'Offers up to 35-50% subsidy on eligible project costs, capped at ₹5 crore, under PMKSY.' },
+          { name: 'Tamil Nadu Capital Subsidy', detail: 'Provides a 25% subsidy on the value of eligible plant and machinery, up to ₹1.5 crore.' }
+        ],
+        recommendations: [
+          "Leverage Partner Synergy Explicitly",
+          "Achieve Hyper-Localized Product-Market Fit",
+          "Prioritize Foundational Operational Rigor",
+          "Implement an Integrated Omnichannel Digital Strategy",
+          "Adopt a Phased Cloud-Native Architecture",
+          "Invest in Structured Talent Management",
+          "Strategically Utilize Government Schemes",
+          "Embrace Continuous Innovation with AI/ML",
+          "Build a Resilient Supply Chain",
+          "Foster Strategic Partnerships",
+        ]
+      };
+
+      // Market Growth Chart
+      const ctx = document.getElementById('marketGrowthChart').getContext('2d');
+      new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: appData.marketGrowth.labels,
+          datasets: [{
+            label: 'Market Size (in US$ Billion)',
+            data: appData.marketGrowth.data,
+            backgroundColor: ['rgba(30, 64, 175, 0.8)', 'rgba(194, 152, 75, 0.8)'],
+            borderColor: ['#1e40af', '#c2984b'],
+            borderWidth: 1
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          indexAxis: 'y',
+          scales: {
+            x: { beginAtZero: true }
+          },
+          plugins: {
+            legend: { display: false },
+            tooltip: {
+              callbacks: {
+                label: (context) => `${context.dataset.label}: ${context.raw}B`
+              }
+            }
+          }
+        }
+      });
+
+      // Timeline
+      const timelineContainer = document.getElementById('timeline-container');
+      appData.timeline.forEach((item, index) => {
+        const div = document.createElement('div');
+        div.className = 'timeline-item relative pl-8 pb-12 cursor-pointer';
+        div.innerHTML = `
+                    <h3 class="font-bold text-xl text-slate-800">${item.title} <span class="text-sm font-medium text-slate-500 ml-2">${item.duration}</span></h3>
+                    <p class="text-slate-600 mb-4">${item.summary}</p>
+                    <div class="details hidden bg-blue-50/50 p-4 rounded-lg border border-blue-200">
+                        <ul class="list-disc list-inside space-y-1 text-slate-700 text-sm">
+                            ${item.details.map(d => `<li>${d}</li>`).join('')}
+                        </ul>
+                    </div>
+                `;
+        div.addEventListener('click', () => {
+          const details = div.querySelector('.details');
+          document.querySelectorAll('.timeline-item').forEach(el => {
+            if (el !== div) {
+              el.querySelector('.details').classList.add('hidden');
+              el.classList.remove('active');
+            }
+          });
+          details.classList.toggle('hidden');
+          div.classList.toggle('active');
+        });
+        timelineContainer.appendChild(div);
+      });
+      // Auto-open first timeline item
+      const firstTimelineItem = timelineContainer.querySelector('.timeline-item');
+      if (firstTimelineItem) {
+        firstTimelineItem.querySelector('.details').classList.remove('hidden');
+        firstTimelineItem.classList.add('active');
+      }
+
+      // Core Pillars Tabs
+      const tabsButtonsContainer = document.getElementById('tabs-buttons');
+      const tabsContentContainer = document.getElementById('tabs-content');
+
+      appData.pillars.forEach((pillar, index) => {
+        const button = document.createElement('button');
+        button.className = 'tab-button text-sm md:text-base font-semibold px-4 py-2 rounded-t-lg transition-colors duration-200';
+        button.innerHTML = `${pillar.icon} ${pillar.name}`;
+        button.dataset.target = `tab-${index}`;
+        tabsButtonsContainer.appendChild(button);
+
+        const contentDiv = document.createElement('div');
+        contentDiv.id = `tab-${index}`;
+        contentDiv.className = 'tab-content hidden';
+        let contentHTML = '<div class="space-y-6">';
+        for (const [key, value] of Object.entries(pillar.content)) {
+          contentHTML += `<div><h4 class="font-bold text-slate-700 mb-1">${key}</h4><p class="text-slate-600 text-sm md:text-base">${value}</p></div>`
+        }
+        contentHTML += '</div>';
+        contentDiv.innerHTML = contentHTML;
+        tabsContentContainer.appendChild(contentDiv);
+      });
+
+      const tabButtons = tabsButtonsContainer.querySelectorAll('.tab-button');
+      const tabContents = tabsContentContainer.querySelectorAll('.tab-content');
+
+      tabButtons.forEach(button => {
+        button.addEventListener('click', () => {
+          tabButtons.forEach(btn => btn.classList.remove('active'));
+          button.classList.add('active');
+
+          tabContents.forEach(content => content.classList.add('hidden'));
+          document.getElementById(button.dataset.target).classList.remove('hidden');
+        });
+      });
+
+      // Activate first tab by default
+      if (tabButtons.length > 0) tabButtons[0].click();
+
+      // Funding Accordion
+      const fundingAccordionContainer = document.getElementById('funding-accordion');
+      appData.fundingSchemes.forEach(scheme => {
+        const div = document.createElement('div');
+        div.className = 'bg-white rounded-xl shadow-lg border border-slate-200';
+        div.innerHTML = `
+                    <button class="accordion-header w-full flex justify-between items-center text-left p-5">
+                        <span class="font-semibold text-slate-800">${scheme.name}</span>
+                        <span class="accordion-icon text-slate-500 transition-transform duration-300">▼</span>
+                    </button>
+                    <div class="accordion-content px-5">
+                        <p class="text-slate-600 pb-5 text-sm">${scheme.detail}</p>
+                    </div>
+                `;
+        fundingAccordionContainer.appendChild(div);
+      });
+
+      fundingAccordionContainer.querySelectorAll('.accordion-header').forEach(button => {
+        button.addEventListener('click', () => {
+          const content = button.nextElementSibling;
+          const icon = button.querySelector('.accordion-icon');
+          const isOpen = content.style.maxHeight;
+
+          // Close all other accordions
+          fundingAccordionContainer.querySelectorAll('.accordion-content').forEach(c => c.style.maxHeight = null);
+          fundingAccordionContainer.querySelectorAll('.accordion-icon').forEach(i => i.style.transform = 'rotate(0deg)');
+
+          if (!isOpen || isOpen === '0px') {
+            content.style.maxHeight = content.scrollHeight + "px";
+            icon.style.transform = 'rotate(180deg)';
+          }
+        });
+      });
+
+      // Recommendations Checklist
+      const recommendationsList = document.getElementById('recommendations-list');
+      const progressText = document.getElementById('progress-text');
+      const progressBar = document.getElementById('progress-bar');
+      let completedCount = 0;
+      const totalCount = appData.recommendations.length;
+
+      appData.recommendations.forEach((rec, index) => {
+        const label = document.createElement('label');
+        label.className = "flex items-center space-x-3 p-3 bg-slate-50 rounded-lg hover:bg-slate-100 cursor-pointer";
+        label.innerHTML = `
+                    <input type="checkbox" class="h-5 w-5 rounded border-gray-300 text-blue-600 focus:ring-blue-500">
+                    <span class="text-slate-700">${rec}</span>
+                `;
+        const checkbox = label.querySelector('input');
+        checkbox.addEventListener('change', () => {
+          if (checkbox.checked) {
+            completedCount++;
+            label.classList.add('line-through', 'text-slate-400');
+          } else {
+            completedCount--;
+            label.classList.remove('line-through', 'text-slate-400');
+          }
+          updateProgress();
+        });
+        recommendationsList.appendChild(label);
+      });
+
+      function updateProgress() {
+        progressText.textContent = `${completedCount}/${totalCount}`;
+        progressBar.style.width = `${(completedCount / totalCount) * 100}%`;
+      }
+
+      // Mobile Menu
+      const mobileMenuButton = document.getElementById('mobile-menu-button');
+      const mobileMenu = document.getElementById('mobile-menu');
+      mobileMenuButton.addEventListener('click', () => mobileMenu.classList.toggle('hidden'));
+      document.querySelectorAll('#mobile-menu a').forEach(link => {
+        link.addEventListener('click', () => mobileMenu.classList.add('hidden'));
+      });
+
+      // Active Nav Link on Scroll
+      const navLinks = document.querySelectorAll('nav a.nav-link');
+      const sections = document.querySelectorAll('main section');
+      const onScroll = () => {
+        let currentSectionId = '';
+        sections.forEach(section => {
+          if (window.scrollY >= section.offsetTop - 150) {
+            currentSectionId = section.getAttribute('id');
+          }
+        });
+
+        let activeLinkFound = false;
+        navLinks.forEach(link => {
+          link.classList.remove('active');
+          if (link.getAttribute('href') === `#${currentSectionId}`) {
+            link.classList.add('active');
+            activeLinkFound = true;
+          }
+        });
+
+        if (!activeLinkFound && currentSectionId === 'overview' && navLinks.length > 0) {
+          document.querySelector('nav a.nav-link[href="#journey"]').classList.add('active');
+        }
+
+      };
+      window.addEventListener('scroll', onScroll);
+      onScroll(); // Set initial state
+    });
+  </script>
+</body>
+
+</html>

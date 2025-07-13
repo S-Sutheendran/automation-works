@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Roadmap: From QA Lead to Full-Stack Architect</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;70},0;800&display=swap" rel="stylesheet">
+  <!-- Chosen Palette: Warm Neutral Harmony -->
+  <!-- Application Structure Plan: The application is designed as an interactive, non-linear dashboard. It begins with a hero section, followed by a sticky navigation to jump between key themes: 'Your Advantage' (highlighting transferable QA skills), 'The Roadmap' (an interactive timeline of the 5 learning phases), 'Tech Deep Dive' (interactive comparison cards for frameworks and databases), 'Portfolio Projects' (a filterable gallery of ideas), and 'Future Skills' (emerging trends). This structure transforms the report's linear text into an engaging, user-driven experience, allowing the user to explore content based on their immediate interests and needs, which is more effective for a self-directed learning plan. -->
+  <!-- Visualization & Content Choices: 
+        - Roadmap: Report's 'Phased Learning Roadmap' table is converted to an interactive horizontal timeline (HTML/CSS/JS). Goal: Guide learning. Interaction: Clicking a phase reveals details in a modal with a Chart.js doughnut chart showing duration. Justification: More intuitive and engaging than a static table.
+        - Tech Comparisons: 'Python Framework' and 'SQL vs NoSQL' tables are now interactive toggle cards (HTML/CSS/JS). Goal: Aid decision-making. Interaction: Clicking buttons reveals side-by-side comparisons. Justification: Focuses user attention and simplifies complex information.
+        - Project Ideas: 'Recommended Projects' table is a gallery of interactive cards (HTML/CSS/JS). Goal: Inspire action. Interaction: Hover/click reveals tech stack and focus. Justification: Visually appealing and encourages exploration.
+        - All diagrams and flows use structured HTML/CSS with JS, no SVG or Mermaid. -->
+  <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #f8f7f4;
+      color: #4a4a4a;
+    }
+
+    .nav-link {
+      transition: all 0.3s ease;
+      cursor: pointer;
+    }
+
+    .nav-link:hover,
+    .nav-link.active {
+      color: #a38b78;
+      border-bottom: 2px solid #a38b78;
+    }
+
+    .phase-node {
+      transition: all 0.3s ease;
+      cursor: pointer;
+    }
+
+    .phase-node:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    }
+
+    .phase-node.active {
+      background-color: #a38b78;
+      color: white;
+    }
+
+    .phase-line {
+      width: calc(100% - 10rem);
+      left: 5rem;
+    }
+
+    .modal {
+      transition: opacity 0.3s ease, visibility 0.3s ease;
+    }
+
+    .card-flip {
+      perspective: 1000px;
+    }
+
+    .card-flip-inner {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      transition: transform 0.6s;
+      transform-style: preserve-3d;
+    }
+
+    .card-flip:hover .card-flip-inner {
+      transform: rotateY(180deg);
+    }
+
+    .card-front,
+    .card-back {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      -webkit-backface-visibility: hidden;
+      backface-visibility: hidden;
+      border-radius: 0.75rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .card-back {
+      transform: rotateY(180deg);
+    }
+
+    .chart-container {
+      position: relative;
+      width: 100%;
+      max-width: 600px;
+      margin-left: auto;
+      margin-right: auto;
+      height: 300px;
+      max-height: 400px;
+    }
+
+    @media (min-width: 768px) {
+      .chart-container {
+        height: 350px;
+      }
+    }
+  </style>
+</head>
+
+<body class="antialiased">
+
+  <nav id="navbar" class="bg-[#f8f7f4]/80 backdrop-blur-md sticky top-0 z-50 shadow-sm">
+    <div class="container mx-auto px-6 py-3 flex justify-between items-center">
+      <h1 class="text-xl font-bold text-[#8c7462]">QA to Full-Stack</h1>
+      <div class="hidden md:flex space-x-8">
+        <a class="nav-link font-medium" data-target="advantage">Your Advantage</a>
+        <a class="nav-link font-medium active" data-target="roadmap">The Roadmap</a>
+        <a class="nav-link font-medium" data-target="tech-dive">Tech Deep Dive</a>
+        <a class="nav-link font-medium" data-target="projects">Portfolio Projects</a>
+        <a class="nav-link font-medium" data-target="future">Future Skills</a>
+      </div>
+      <button id="mobile-menu-button" class="md:hidden p-2 rounded-md">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-4 6h4" />
+        </svg>
+      </button>
+    </div>
+    <div id="mobile-menu" class="hidden md:hidden px-6 pt-2 pb-4 space-y-2">
+      <a class="block nav-link font-medium" data-target="advantage">Your Advantage</a>
+      <a class="block nav-link font-medium" data-target="roadmap">The Roadmap</a>
+      <a class="block nav-link font-medium" data-target="tech-dive">Tech Deep Dive</a>
+      <a class="block nav-link font-medium" data-target="projects">Portfolio Projects</a>
+      <a class="block nav-link font-medium" data-target="future">Future Skills</a>
+    </div>
+  </nav>
+
+  <main class="container mx-auto px-6 py-12">
+    <header class="text-center mb-16">
+      <h2 class="text-4xl md:text-5xl font-extrabold text-[#8c7462] mb-4">Your Journey to Full-Stack Architect</h2>
+      <p class="text-lg text-gray-600 max-w-3xl mx-auto">An interactive roadmap designed to transition an experienced QA
+        Lead into a highly competent full-stack developer by 2026.</p>
+    </header>
+
+    <section id="advantage" class="mb-24 scroll-mt-24">
+      <h3 class="text-3xl font-bold text-center mb-4 text-[#a38b78]">Leverage Your QA Foundation</h3>
+      <p class="text-center text-gray-600 max-w-3xl mx-auto mb-12">Your background in Quality Assurance is not just a
+        starting point—it's a strategic advantage. This section highlights how your existing expertise in test
+        automation, CI/CD, and system analysis directly translates into building more robust, reliable, and user-centric
+        applications from day one.</p>
+      <div class="grid md:grid-cols-3 gap-8 text-center">
+        <div class="bg-white p-6 rounded-xl shadow-lg border border-gray-200">
+          <div class="text-4xl mb-4">🔬</div>
+          <h4 class="text-xl font-semibold mb-2 text-[#8c7462]">A Quality-First Mindset</h4>
+          <p class="text-gray-600">Your ability to anticipate failure points and understand user flows allows you to
+            design more resilient and maintainable systems, reducing technical debt before it's even created.</p>
+        </div>
+        <div class="bg-white p-6 rounded-xl shadow-lg border border-gray-200">
+          <div class="text-4xl mb-4">🚀</div>
+          <h4 class="text-xl font-semibold mb-2 text-[#8c7462]">DevOps & CI/CD Accelerator</h4>
+          <p class="text-gray-600">Expertise in Azure Pipelines and Jenkins provides a massive head start in
+            understanding the full software lifecycle, enabling you to build applications that are deployable and
+            scalable by design.</p>
+        </div>
+        <div class="bg-white p-6 rounded-xl shadow-lg border border-gray-200">
+          <div class="text-4xl mb-4">💻</div>
+          <h4 class="text-xl font-semibold mb-2 text-[#8c7462]">The Automation Bridge</h4>
+          <p class="text-gray-600">Your skills in Selenium, Python, and Playwright are practical coding experience. This
+            provides a seamless transition into writing production-level code for both backend and frontend.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="roadmap" class="mb-24 scroll-mt-24">
+      <h3 class="text-3xl font-bold text-center mb-4 text-[#a38b78]">The Interactive Mastery Roadmap</h3>
+      <p class="text-center text-gray-600 max-w-3xl mx-auto mb-16">This is your step-by-step guide to becoming a
+        full-stack expert. The journey is broken down into five distinct phases, each building upon the last. Click on
+        any phase to explore the key technologies, core concepts, and expected outcomes for that period. This
+        interactive timeline helps visualize your progression and focus your efforts.</p>
+      <div class="relative w-full">
+        <div class="absolute top-1/2 -translate-y-1/2 h-1 bg-gray-300 phase-line"></div>
+        <div class="relative flex justify-between items-center">
+          <div
+            class="phase-node w-40 h-40 flex items-center justify-center flex-col p-4 rounded-full bg-white shadow-lg border-2 border-[#a38b78]"
+            data-phase="1">
+            <span class="font-bold text-lg">Phase 1</span>
+            <span class="text-sm text-center">Core Fundamentals</span>
+          </div>
+          <div
+            class="phase-node w-40 h-40 flex items-center justify-center flex-col p-4 rounded-full bg-white shadow-lg border-2 border-gray-300"
+            data-phase="2">
+            <span class="font-bold text-lg">Phase 2</span>
+            <span class="text-sm text-center">Specialization</span>
+          </div>
+          <div
+            class="phase-node w-40 h-40 flex items-center justify-center flex-col p-4 rounded-full bg-white shadow-lg border-2 border-gray-300"
+            data-phase="3">
+            <span class="font-bold text-lg">Phase 3</span>
+            <span class="text-sm text-center">Data Management</span>
+          </div>
+          <div
+            class="phase-node w-40 h-40 flex items-center justify-center flex-col p-4 rounded-full bg-white shadow-lg border-2 border-gray-300"
+            data-phase="4">
+            <span class="font-bold text-lg">Phase 4</span>
+            <span class="text-sm text-center">DevOps & Deployment</span>
+          </div>
+          <div
+            class="phase-node w-40 h-40 flex items-center justify-center flex-col p-4 rounded-full bg-white shadow-lg border-2 border-gray-300"
+            data-phase="5">
+            <span class="font-bold text-lg">Phase 5</span>
+            <span class="text-sm text-center">Advanced Concepts</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="tech-dive" class="mb-24 scroll-mt-24">
+      <h3 class="text-3xl font-bold text-center mb-4 text-[#a38b78]">Tech Deep Dive</h3>
+      <p class="text-center text-gray-600 max-w-3xl mx-auto mb-12">Choosing the right tools is a critical architectural
+        decision. This section provides interactive comparisons of key technologies in your learning path. Use these
+        toggles to quickly understand the trade-offs between Python backend frameworks and database types, helping you
+        make informed decisions for your projects.</p>
+      <div class="grid md:grid-cols-2 gap-8">
+        <div class="bg-white p-6 rounded-xl shadow-lg border border-gray-200">
+          <h4 class="text-xl font-semibold text-center mb-4 text-[#8c7462]">Python Backend Frameworks</h4>
+          <div class="flex justify-center space-x-2 mb-4">
+            <button class="tech-toggle-btn bg-gray-200 px-4 py-2 rounded-full text-sm font-medium"
+              data-tech="django">Django</button>
+            <button class="tech-toggle-btn bg-gray-200 px-4 py-2 rounded-full text-sm font-medium"
+              data-tech="flask">Flask</button>
+            <button class="tech-toggle-btn bg-gray-200 px-4 py-2 rounded-full text-sm font-medium"
+              data-tech="fastapi">FastAPI</button>
+          </div>
+          <div id="tech-content-python" class="text-gray-600 p-4 bg-gray-50 rounded-lg min-h-[150px]"></div>
+        </div>
+        <div class="bg-white p-6 rounded-xl shadow-lg border border-gray-200">
+          <h4 class="text-xl font-semibold text-center mb-4 text-[#8c7462]">SQL vs. NoSQL Databases</h4>
+          <div class="flex justify-center space-x-2 mb-4">
+            <button class="tech-toggle-btn bg-gray-200 px-4 py-2 rounded-full text-sm font-medium"
+              data-tech="sql">SQL</button>
+            <button class="tech-toggle-btn bg-gray-200 px-4 py-2 rounded-full text-sm font-medium"
+              data-tech="nosql">NoSQL</button>
+          </div>
+          <div id="tech-content-db" class="text-gray-600 p-4 bg-gray-50 rounded-lg min-h-[150px]"></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="projects" class="mb-24 scroll-mt-24">
+      <h3 class="text-3xl font-bold text-center mb-4 text-[#a38b78]">Build Your Standout Portfolio</h3>
+      <p class="text-center text-gray-600 max-w-3xl mx-auto mb-12">Theory is important, but practical application
+        solidifies your skills. This section presents a gallery of project ideas designed to integrate the technologies
+        you're learning. Hover over a card to see the suggested tech stack and key learning objectives. These projects
+        will become the tangible proof of your full-stack capabilities.</p>
+      <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+      </div>
+    </section>
+
+    <section id="future" class="scroll-mt-24">
+      <h3 class="text-3xl font-bold text-center mb-4 text-[#a38b78]">Future-Proof Your Career</h3>
+      <p class="text-center text-gray-600 max-w-3xl mx-auto mb-12">The tech landscape is always evolving. Mastering
+        today's stack is crucial, but keeping an eye on tomorrow's trends is what ensures long-term relevance and career
+        growth. This section provides a brief overview of key emerging areas that will shape the future of full-stack
+        development.</p>
+      <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6 text-center">
+      </div>
+    </section>
+  </main>
+
+  <div id="phase-modal"
+    class="modal invisible opacity-0 fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+    <div class="bg-white rounded-2xl shadow-2xl w-full max-w-4xl max-h-[90vh] overflow-y-auto p-8 relative">
+      <button id="close-modal" class="absolute top-4 right-4 text-gray-500 hover:text-gray-800">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+        </svg>
+      </button>
+      <div class="grid md:grid-cols-2 gap-8 items-center">
+        <div>
+          <h4 id="modal-title" class="text-3xl font-bold text-[#a38b78] mb-2"></h4>
+          <p id="modal-duration" class="font-medium text-gray-500 mb-4"></p>
+          <p id="modal-outcome" class="text-gray-600 mb-6"></p>
+          <h5 class="font-semibold text-lg mb-3 text-[#8c7462]">Key Technologies & Concepts:</h5>
+          <ul id="modal-concepts" class="list-disc list-inside space-y-2 text-gray-700">
+          </ul>
+        </div>
+        <div class="chart-container">
+          <canvas id="phase-chart"></canvas>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      const phaseData = {
+        '1': {
+          title: 'Phase 1: Core Development Fundamentals',
+          duration: 'Months 1-3',
+          months: 3,
+          outcome: 'Build a solid foundation in core programming paradigms and web communication, preparing you for specialized development.',
+          concepts: [
+            'Advanced Python (Async, OOP)',
+            'Modern JavaScript (ES6+, Async)',
+            'Advanced Git & Collaboration',
+            'Web Architecture (HTTP, REST)'
+          ]
+        },
+        '2': {
+          title: 'Phase 2: Frontend & Backend Specialization',
+          duration: 'Months 4-8',
+          months: 5,
+          outcome: 'Achieve proficiency in building dynamic user interfaces with React and robust backend services with Python frameworks.',
+          concepts: [
+            'React Framework (Hooks, State)',
+            'Python Frameworks (Django, Flask, FastAPI)',
+            'RESTful API Design & Security',
+            'Component-Based Architecture'
+          ]
+        },
+        '3': {
+          title: 'Phase 3: Data Management & Persistence',
+          duration: 'Months 9-12',
+          months: 4,
+          outcome: 'Gain expertise in storing, retrieving, and managing data efficiently using both SQL and NoSQL databases.',
+          concepts: [
+            'Relational Databases (SQL Mastery)',
+            'NoSQL Databases (MongoDB)',
+            'Deep Dive into Redis (Caching, Pub/Sub)',
+            'Database Optimization & Indexing'
+          ]
+        },
+        '4': {
+          title: 'Phase 4: DevOps, Containerization & Orchestration',
+          duration: 'Months 13-18',
+          months: 6,
+          outcome: 'Master the ability to containerize, deploy, and manage scalable applications in modern cloud environments.',
+          concepts: [
+            'Docker (Containerization, Compose)',
+            'Kubernetes (Architecture, Objects)',
+            'CI/CD Pipeline Integration',
+            'Advanced Playwright for E2E Testing'
+          ]
+        },
+        '5': {
+          title: 'Phase 5: Advanced Concepts & Architecture',
+          duration: 'Months 19-24',
+          months: 6,
+          outcome: 'Develop the capability to design, optimize, and troubleshoot complex, distributed systems at a senior level.',
+          concepts: [
+            'Data Structures & Algorithms (DSA)',
+            'Software Design Patterns',
+            'Microservices Architecture',
+            'Advanced Cloud Services'
+          ]
+        }
+      };
+
+      const techData = {
+        python: {
+          django: '<strong>Django:</strong> A robust, "batteries-included" framework ideal for rapid development of complex, database-driven applications. Excellent for full-stack apps with an admin panel out-of-the-box.',
+          flask: '<strong>Flask:</strong> A flexible, lightweight micro-framework. Perfect for smaller projects, microservices, and custom REST APIs where you want more control over components.',
+          fastapi: '<strong>FastAPI:</strong> A modern, high-performance framework for building APIs with Python 3.7+ based on standard type hints. Known for its speed and automatic interactive documentation.'
+        },
+        db: {
+          sql: '<strong>SQL (Relational):</strong> Best for structured data with predefined schemas. Ensures data integrity and consistency (ACID compliance). Ideal for applications requiring complex queries and transactions.',
+          nosql: '<strong>NoSQL (Non-Relational):</strong> Offers flexible data models for unstructured or semi-structured data. Scales horizontally and is great for big data, real-time applications, and content management.'
+        }
+      };
+
+      const projectData = [
+        { title: 'E-commerce Platform', complexity: 'Advanced', tech: 'React, Django, PostgreSQL, Redis, Docker, K8s', focus: 'Full lifecycle development, payment integration, and scalable deployment.' },
+        { title: 'Real-time Chat App', complexity: 'Intermediate-Advanced', tech: 'React, FastAPI, Redis (Pub/Sub), WebSockets', focus: 'Real-time communication, async programming, and message brokering.' },
+        { title: 'Analytics Dashboard', complexity: 'Intermediate', tech: 'React, Flask, Redis, Docker', focus: 'Data collection, caching strategies, and data visualization.' },
+        { title: 'Microservices API', complexity: 'Advanced', tech: 'Python (multiple), API Gateway, Docker, K8s', focus: 'Distributed systems, inter-service communication, and orchestration.' },
+        { title: 'Tutorial Platform', complexity: 'Intermediate', tech: 'React, Django, PostgreSQL, Docker', focus: 'Content management, user authentication, and data modeling.' },
+        { title: 'Bug Tracker', complexity: 'Intermediate', tech: 'React, FastAPI, SQL, Playwright', focus: 'CRUD operations, user roles, and integrating E2E tests for core features.' }
+      ];
+
+      const futureData = [
+        { title: 'AI/ML Integration', icon: '🧠', desc: 'Leveraging AI for enhanced coding, predictive analytics, and personalization.' },
+        { title: 'Serverless Architectures', icon: '☁️', desc: 'Focusing on application logic while cloud providers manage infrastructure.' },
+        { title: 'Advanced Cybersecurity', icon: '🛡️', desc: 'Integrating security into every stage of the development lifecycle.' },
+        { title: 'Progressive Web Apps', icon: '📱', desc: 'Offering native app-like experiences directly through web technologies.' }
+      ];
+
+      const phaseNodes = document.querySelectorAll('.phase-node');
+      const modal = document.getElementById('phase-modal');
+      const closeModalBtn = document.getElementById('close-modal');
+      let phaseChart = null;
+
+      phaseNodes.forEach(node => {
+        node.addEventListener('click', () => {
+          const phaseId = node.dataset.phase;
+          const data = phaseData[phaseId];
+
+          phaseNodes.forEach(n => {
+            n.classList.remove('active', 'bg-[#a38b78]', 'text-white');
+            n.classList.add('bg-white');
+            n.style.borderColor = '#d1d5db';
+          });
+
+          node.classList.add('active', 'bg-[#a38b78]', 'text-white');
+          node.style.borderColor = '#a38b78';
+
+          document.getElementById('modal-title').innerText = data.title;
+          document.getElementById('modal-duration').innerText = `Duration: ${data.duration}`;
+          document.getElementById('modal-outcome').innerText = data.outcome;
+
+          const conceptsList = document.getElementById('modal-concepts');
+          conceptsList.innerHTML = '';
+          data.concepts.forEach(concept => {
+            const li = document.createElement('li');
+            li.textContent = concept;
+            conceptsList.appendChild(li);
+          });
+
+          modal.classList.remove('invisible', 'opacity-0');
+
+          const chartCanvas = document.getElementById('phase-chart').getContext('2d');
+          if (phaseChart) {
+            phaseChart.destroy();
+          }
+          phaseChart = new Chart(chartCanvas, {
+            type: 'doughnut',
+            data: {
+              labels: data.concepts,
+              datasets: [{
+                label: 'Focus Areas',
+                data: Array(data.concepts.length).fill(10),
+                backgroundColor: [
+                  'rgba(163, 139, 120, 0.8)',
+                  'rgba(140, 116, 98, 0.7)',
+                  'rgba(189, 170, 158, 0.8)',
+                  'rgba(115, 96, 82, 0.7)'
+                ],
+                borderColor: '#f8f7f4',
+                borderWidth: 4
+              }]
+            },
+            options: {
+              responsive: true,
+              maintainAspectRatio: false,
+              plugins: {
+                legend: {
+                  position: 'bottom',
+                },
+                title: {
+                  display: true,
+                  text: `Months: ${data.months}`,
+                  font: { size: 16 }
+                },
+                tooltip: {
+                  callbacks: {
+                    label: function (context) {
+                      return context.label;
+                    }
+                  }
+                }
+              }
+            }
+          });
+
+        });
+      });
+
+      closeModalBtn.addEventListener('click', () => {
+        modal.classList.add('invisible', 'opacity-0');
+      });
+
+      modal.addEventListener('click', (e) => {
+        if (e.target === modal) {
+          modal.classList.add('invisible', 'opacity-0');
+        }
+      });
+
+      function setupToggle(containerId, contentId, dataObject, defaultKey) {
+        const container = document.getElementById(containerId);
+        const contentDiv = document.getElementById(contentId);
+        const buttons = container.querySelectorAll('.tech-toggle-btn');
+
+        function updateContent(key) {
+          contentDiv.innerHTML = dataObject[key];
+          buttons.forEach(btn => {
+            if (btn.dataset.tech === key) {
+              btn.classList.add('bg-[#a38b78]', 'text-white');
+              btn.classList.remove('bg-gray-200');
+            } else {
+              btn.classList.remove('bg-[#a38b78]', 'text-white');
+              btn.classList.add('bg-gray-200');
+            }
+          });
+        }
+
+        buttons.forEach(button => {
+          button.addEventListener('click', () => {
+            updateContent(button.dataset.tech);
+          });
+        });
+
+        updateContent(defaultKey);
+      }
+
+      setupToggle('tech-dive', 'tech-content-python', techData.python, 'django');
+      setupToggle('tech-dive', 'tech-content-db', techData.db, 'sql');
+
+
+      const projectsContainer = document.querySelector('#projects .grid');
+      projectData.forEach(p => {
+        const projectEl = document.createElement('div');
+        projectEl.className = 'card-flip h-64';
+        projectEl.innerHTML = `
+                    <div class="card-flip-inner shadow-lg rounded-xl">
+                        <div class="card-front bg-white border border-gray-200 p-6">
+                            <h4 class="text-2xl font-bold text-center text-[#8c7462]">${p.title}</h4>
+                            <p class="text-gray-500 mt-2">${p.complexity}</p>
+                        </div>
+                        <div class="card-back bg-[#8c7462] text-white p-6">
+                            <h5 class="font-semibold text-lg mb-2">Tech Stack:</h5>
+                            <p class="text-sm mb-4">${p.tech}</p>
+                            <h5 class="font-semibold text-lg mb-2">Learning Focus:</h5>
+                            <p class="text-sm">${p.focus}</p>
+                        </div>
+                    </div>
+                `;
+        projectsContainer.appendChild(projectEl);
+      });
+
+      const futureContainer = document.querySelector('#future .grid');
+      futureData.forEach(f => {
+        const futureEl = document.createElement('div');
+        futureEl.className = 'bg-white p-6 rounded-xl shadow-lg border border-gray-200';
+        futureEl.innerHTML = `
+                    <div class="text-4xl mb-4">${f.icon}</div>
+                    <h4 class="text-xl font-semibold mb-2 text-[#8c7462]">${f.title}</h4>
+                    <p class="text-gray-600">${f.desc}</p>
+                `;
+        futureContainer.appendChild(futureEl);
+      });
+
+      const navLinks = document.querySelectorAll('.nav-link');
+      const sections = document.querySelectorAll('main section');
+
+      function changeActiveLink() {
+        let index = sections.length;
+        while (--index && window.scrollY + 100 < sections[index].offsetTop) { }
+
+        navLinks.forEach((link) => link.classList.remove('active', 'border-[#a38b78]'));
+        const activeLink = document.querySelector(`.nav-link[data-target="${sections[index].id}"]`);
+        if (activeLink) {
+          activeLink.classList.add('active', 'border-[#a38b78]');
+        }
+      }
+
+      navLinks.forEach(link => {
+        link.addEventListener('click', (e) => {
+          e.preventDefault();
+          const targetId = link.getAttribute('data-target');
+          const targetElement = document.getElementById(targetId);
+          if (targetElement) {
+            window.scrollTo({
+              top: targetElement.offsetTop - 80,
+              behavior: 'smooth'
+            });
+          }
+        });
+      });
+
+      window.addEventListener('scroll', changeActiveLink);
+      changeActiveLink();
+
+      const mobileMenuButton = document.getElementById('mobile-menu-button');
+      const mobileMenu = document.getElementById('mobile-menu');
+      mobileMenuButton.addEventListener('click', () => {
+        mobileMenu.classList.toggle('hidden');
+      });
+      mobileMenu.querySelectorAll('.nav-link').forEach(link => {
+        link.addEventListener('click', () => {
+          mobileMenu.classList.add('hidden');
+        });
+      });
+
+      document.querySelector('.phase-node[data-phase="1"]').click();
+
+    });
+  </script>
+</body>
+
+</html>

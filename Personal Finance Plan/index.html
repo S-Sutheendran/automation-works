@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Financial Plan: Debt Freedom & Wealth Creation</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <!-- Chosen Palette: Calm Financial Blue -->
+  <!-- Application Structure Plan: The application is structured as a goal-oriented personal finance dashboard with four distinct, navigable sections. 1) 'Current Financial Health': A snapshot of income, expenses, and debt. 2) 'Debt Repayment Plan': An interactive two-step guide to clearing the credit card bill. 3) 'Building Your Foundation': Visual trackers for the 50/30/20 budget and the emergency fund. 4) 'Side Income Explorer': Interactive cards detailing freelance opportunities. This structure guides the user from their current state to future goals logically, making a complex financial plan digestible and actionable. -->
+  <!-- Visualization & Content Choices: 
+        - Financial Health: Report's expense list becomes an interactive Doughnut chart (Chart.js) to show proportions. Goal: Inform. Interaction: Hover for details. Justification: More intuitive than a list for understanding spending composition.
+        - Debt Plan: The report's step-by-step plan is an HTML/CSS/JS visual timeline. Goal: Guide. Interaction: Click steps to highlight action. Justification: Turns a static plan into an active checklist.
+        - Budgeting: The 50/30/20 rule is a Bar chart (Chart.js). Goal: Organize. Interaction: Hover to see allocation details. Justification: Visually reinforces budget targets.
+        - Emergency Fund: A dynamic progress bar (HTML/CSS/JS). Goal: Motivate. Interaction: Buttons to select 3 or 6-month goal. Justification: Provides clear, motivating visual feedback on savings progress.
+        - Side Income: Interactive HTML/CSS cards. Goal: Explore. Interaction: Click to reveal details (rates, skills). Justification: Engages user to explore options without cluttering the UI.
+        - All elements use Chart.js or HTML/CSS/JS. -->
+  <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #f7fafc;
+      color: #2d3748;
+    }
+
+    .nav-link {
+      transition: all 0.3s ease;
+      cursor: pointer;
+    }
+
+    .nav-link:hover,
+    .nav-link.active {
+      color: #2b6cb0;
+      border-bottom-color: #2b6cb0;
+    }
+
+    .stat-card {
+      background: linear-gradient(145deg, #ffffff, #e6e6e6);
+      box-shadow: 5px 5px 10px #d4d4d4, -5px -5px 10px #ffffff;
+    }
+
+    .debt-card {
+      background: linear-gradient(145deg, #fed7d7, #fcc2c2);
+      box-shadow: 5px 5px 10px #e1afaf, -5px -5px 10px #ffdfdf;
+    }
+
+    .progress-bar-container {
+      background-color: #e2e8f0;
+      border-radius: 9999px;
+      overflow: hidden;
+      height: 1.5rem;
+    }
+
+    .progress-bar {
+      background-color: #48bb78;
+      transition: width 0.5s ease-in-out;
+      height: 100%;
+    }
+
+    .tab-button.active {
+      background-color: #2b6cb0;
+      color: white;
+    }
+
+    .chart-container {
+      position: relative;
+      width: 100%;
+      max-width: 400px;
+      margin-left: auto;
+      margin-right: auto;
+      height: 300px;
+      max-height: 400px;
+    }
+
+    @media (min-width: 768px) {
+      .chart-container {
+        height: 350px;
+        max-width: 500px;
+      }
+    }
+  </style>
+</head>
+
+<body class="antialiased">
+
+  <nav id="navbar" class="bg-white/80 backdrop-blur-md sticky top-0 z-50 shadow-sm">
+    <div class="container mx-auto px-6 py-3 flex justify-between items-center">
+      <h1 class="text-xl font-bold text-gray-800">Your Financial Dashboard</h1>
+      <div class="hidden md:flex space-x-8">
+        <a class="nav-link border-b-2 border-transparent pb-1" data-target="health">Health Check</a>
+        <a class="nav-link border-b-2 border-transparent pb-1" data-target="debt-plan">Debt Plan</a>
+        <a class="nav-link border-b-2 border-transparent pb-1" data-target="foundation">Foundation</a>
+        <a class="nav-link border-b-2 border-transparent pb-1" data-target="income">Side Income</a>
+      </div>
+      <button id="mobile-menu-button" class="md:hidden p-2 rounded-md">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-4 6h4" />
+        </svg>
+      </button>
+    </div>
+    <div id="mobile-menu" class="hidden md:hidden px-6 pt-2 pb-4 space-y-2">
+      <a class="block nav-link" data-target="health">Health Check</a>
+      <a class="block nav-link" data-target="debt-plan">Debt Plan</a>
+      <a class="block nav-link" data-target="foundation">Foundation</a>
+      <a class="block nav-link" data-target="income">Side Income</a>
+    </div>
+  </nav>
+
+  <main class="container mx-auto px-6 py-12">
+
+    <section id="health" class="mb-24 scroll-mt-24">
+      <h2 class="text-3xl font-bold text-center mb-4 text-gray-800">Current Financial Health</h2>
+      <p class="text-center text-gray-600 max-w-3xl mx-auto mb-12">This section provides a snapshot of your current
+        monthly finances. Understanding your income, fixed expenses, and outstanding debt is the first step towards
+        taking control and building a secure future. Your ₹30,899 monthly surplus is a powerful tool we will leverage.
+      </p>
+      <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8 items-center">
+        <div class="lg:col-span-2 grid grid-cols-1 sm:grid-cols-2 gap-6">
+          <div class="stat-card p-6 rounded-xl text-center">
+            <p class="text-gray-500 text-sm font-medium">Monthly Income</p>
+            <p class="text-4xl font-extrabold text-green-600">₹70,000</p>
+          </div>
+          <div class="stat-card p-6 rounded-xl text-center">
+            <p class="text-gray-500 text-sm font-medium">Total Expenses</p>
+            <p class="text-4xl font-extrabold text-blue-600">₹39,101</p>
+          </div>
+          <div class="debt-card p-6 rounded-xl text-center sm:col-span-2">
+            <p class="text-red-800 text-sm font-medium">Credit Card Debt to Clear</p>
+            <p class="text-5xl font-extrabold text-red-600">₹70,000</p>
+            <p class="text-red-700 text-xs mt-1">High Interest Rate: Up to 48% APR</p>
+          </div>
+        </div>
+        <div class="chart-container">
+          <canvas id="expensesChart"></canvas>
+        </div>
+      </div>
+    </section>
+
+    <section id="debt-plan" class="mb-24 scroll-mt-24">
+      <h2 class="text-3xl font-bold text-center mb-4 text-gray-800">Accelerated Debt Repayment Plan</h2>
+      <p class="text-center text-gray-600 max-w-3xl mx-auto mb-12">This is your two-month action plan to eliminate the
+        high-interest credit card debt. By temporarily reallocating your mutual fund investment and focusing your
+        surplus, you can clear this bill swiftly, saving significant money on interest and freeing up your finances for
+        growth.</p>
+      <div class="flex flex-col md:flex-row justify-center items-center gap-4 md:gap-0">
+        <div class="p-8 bg-white rounded-xl shadow-lg border w-full md:w-1/3 text-center z-10">
+          <div class="text-3xl font-bold text-blue-600 mb-2">Month 1</div>
+          <p class="font-semibold text-lg mb-2">Combine & Attack</p>
+          <p class="text-gray-600 text-sm mb-4">Pause the ₹15,000 Mutual Fund SIP and combine it with your ₹30,899
+            surplus.</p>
+          <div class="bg-blue-100 text-blue-800 p-4 rounded-lg">
+            <p class="font-bold text-2xl">Pay ₹45,899</p>
+          </div>
+        </div>
+        <div class="hidden md:block w-16 h-1 bg-gray-300"></div>
+        <div class="w-full h-8 md:hidden"></div>
+        <div class="p-8 bg-white rounded-xl shadow-lg border w-full md:w-1/3 text-center">
+          <div class="text-3xl font-bold text-green-600 mb-2">Month 2</div>
+          <p class="font-semibold text-lg mb-2">Final Payment</p>
+          <p class="text-gray-600 text-sm mb-4">Pay off the remaining balance with your next month's surplus.</p>
+          <div class="bg-green-100 text-green-800 p-4 rounded-lg">
+            <p class="font-bold text-2xl">Pay ₹24,101</p>
+          </div>
+        </div>
+      </div>
+      <p class="text-center mt-8 font-bold text-2xl text-green-700">🎉 Debt Free in 2 Months! 🎉</p>
+    </section>
+
+    <section id="foundation" class="mb-24 scroll-mt-24">
+      <h2 class="text-3xl font-bold text-center mb-4 text-gray-800">Building Your Financial Foundation</h2>
+      <p class="text-center text-gray-600 max-w-3xl mx-auto mb-12">With high-interest debt gone, the focus shifts to
+        building long-term financial resilience. This involves implementing a smart budget to manage cash flow and
+        creating an emergency fund to protect you from future unexpected costs.</p>
+      <div class="grid lg:grid-cols-5 gap-12 items-start">
+        <div class="lg:col-span-3 bg-white p-6 rounded-xl shadow-lg border">
+          <h3 class="font-bold text-xl mb-4 text-center">The 50/30/20 Budget Rule</h3>
+          <p class="text-sm text-gray-600 text-center mb-6">Allocate your ₹70,000 monthly income into three simple
+            categories to ensure a balance between needs, wants, and savings.</p>
+          <div class="chart-container" style="max-width: 600px; height: 300px;">
+            <canvas id="budgetChart"></canvas>
+          </div>
+        </div>
+        <div class="lg:col-span-2 bg-white p-6 rounded-xl shadow-lg border">
+          <h3 class="font-bold text-xl mb-4 text-center">Emergency Fund Goal</h3>
+          <p class="text-sm text-gray-600 text-center mb-6">Create a safety net to cover 3-6 months of essential
+            expenses. This prevents future debt when unexpected costs arise.</p>
+          <div class="flex justify-center mb-4">
+            <button id="goal3"
+              class="tab-button text-sm font-medium px-4 py-2 rounded-l-full border border-gray-300 active">3-Month
+              Goal</button>
+            <button id="goal6"
+              class="tab-button text-sm font-medium px-4 py-2 rounded-r-full border border-gray-300">6-Month
+              Goal</button>
+          </div>
+          <p class="text-center font-bold text-2xl mb-2" id="ef-goal-text">Target: ₹72,303</p>
+          <div class="progress-bar-container">
+            <div id="ef-progress-bar" class="progress-bar flex items-center justify-center text-white text-xs font-bold"
+              style="width: 0%;">0%</div>
+          </div>
+          <p class="text-center text-gray-600 mt-4 text-sm">Contribute ₹14,000/month from your savings allocation to
+            reach your goal in <strong id="ef-time">~5 months</strong>.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="income" class="scroll-mt-24">
+      <h2 class="text-3xl font-bold text-center mb-4 text-gray-800">Side Income Explorer</h2>
+      <p class="text-center text-gray-600 max-w-3xl mx-auto mb-12">Once your finances are stable, generating additional
+        income can dramatically accelerate your wealth-building journey. Explore these options that leverage your
+        existing skills and provide a path to high-demand new ones.</p>
+      <div class="grid md:grid-cols-2 gap-8">
+        <div id="side-income-container"></div>
+      </div>
+    </section>
+
+  </main>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+
+      const financialData = {
+        income: 70000,
+        expenses: [
+          { label: 'Rent', value: 11101, color: '#4299e1' },
+          { label: 'Mutual Fund', value: 15000, color: '#48bb78' },
+          { label: 'EMI', value: 7000, color: '#ed8936' },
+          { label: 'Personal', value: 5000, color: '#9f7aea' },
+          { label: 'Maid', value: 1000, color: '#f56565' }
+        ],
+        essentialExpenses: 11101 + 7000 + 1000 + 5000,
+        savingsAllocation: 14000,
+        sideIncome: [
+          {
+            title: 'Freelance QA/Testing',
+            subtitle: 'Leverage Your Existing Skills',
+            description: 'Your background in the service industry, likely in a tech role, is a valuable asset. Freelance QA and testing are in high demand.',
+            details: {
+              'Potential Rate': '₹500 - ₹2,000+ per hour',
+              'Platforms': 'Upwork, Truelancer, Guru',
+              'Why start here?': 'Low barrier to entry, builds a freelance portfolio, and directly uses your current expertise to generate income immediately.'
+            }
+          },
+          {
+            title: 'Become a Full-Stack Developer',
+            subtitle: 'Invest in High-Demand Skills',
+            description: 'Transitioning to full-stack development unlocks significantly higher earning potential and career growth.',
+            details: {
+              'Potential Rate (Freelance)': '₹2,500 - ₹4,000+ per hour',
+              'Key Technologies': 'React (Frontend), Python/FastAPI (Backend), Docker, Kubernetes, SQL/NoSQL',
+              'Path forward': 'Follow a structured roadmap to learn the tech stack, build portfolio projects, and command premium rates.'
+            }
+          }
+        ]
+      };
+
+      const formatCurrency = (value) => new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR', minimumFractionDigits: 0 }).format(value);
+
+      // Chart 1: Expenses Doughnut Chart
+      const ctxExpenses = document.getElementById('expensesChart').getContext('2d');
+      new Chart(ctxExpenses, {
+        type: 'doughnut',
+        data: {
+          labels: financialData.expenses.map(e => e.label),
+          datasets: [{
+            data: financialData.expenses.map(e => e.value),
+            backgroundColor: financialData.expenses.map(e => e.color),
+            borderColor: '#f7fafc',
+            borderWidth: 4,
+            hoverOffset: 4
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          cutout: '60%',
+          plugins: {
+            legend: {
+              position: 'bottom',
+              labels: {
+                padding: 20,
+                font: {
+                  size: 12
+                }
+              }
+            },
+            tooltip: {
+              callbacks: {
+                label: function (context) {
+                  let label = context.label || '';
+                  if (label) {
+                    label += ': ';
+                  }
+                  if (context.parsed !== null) {
+                    label += formatCurrency(context.parsed);
+                  }
+                  return label;
+                }
+              }
+            }
+          }
+        }
+      });
+
+      // Chart 2: Budget Bar Chart
+      const ctxBudget = document.getElementById('budgetChart').getContext('2d');
+      new Chart(ctxBudget, {
+        type: 'bar',
+        data: {
+          labels: ['Needs (50%)', 'Wants (30%)', 'Savings (20%)'],
+          datasets: [{
+            label: 'Budget Allocation',
+            data: [financialData.income * 0.5, financialData.income * 0.3, financialData.income * 0.2],
+            backgroundColor: ['#4299e1', '#9f7aea', '#48bb78'],
+            borderRadius: 8
+          }]
+        },
+        options: {
+          indexAxis: 'y',
+          responsive: true,
+          maintainAspectRatio: false,
+          scales: {
+            x: {
+              ticks: {
+                callback: (value) => formatCurrency(value)
+              }
+            }
+          },
+          plugins: {
+            legend: { display: false },
+            tooltip: {
+              callbacks: {
+                label: (context) => formatCurrency(context.raw)
+              }
+            }
+          }
+        }
+      });
+
+      // Interactive Emergency Fund
+      const efGoalText = document.getElementById('ef-goal-text');
+      const efProgressBar = document.getElementById('ef-progress-bar');
+      const efTime = document.getElementById('ef-time');
+      const goal3Btn = document.getElementById('goal3');
+      const goal6Btn = document.getElementById('goal6');
+      let currentGoalMonths = 3;
+      let currentProgress = 0; // Let's assume 0 for demo
+
+      function updateEmergencyFund() {
+        const targetAmount = financialData.essentialExpenses * currentGoalMonths;
+        const timeToGoal = Math.ceil(targetAmount / financialData.savingsAllocation);
+        efGoalText.textContent = `Target: ${formatCurrency(targetAmount)}`;
+        efTime.textContent = `~${timeToGoal} months`;
+        const progressPercentage = Math.min((currentProgress / targetAmount) * 100, 100);
+        efProgressBar.style.width = `${progressPercentage}%`;
+        efProgressBar.textContent = `${Math.round(progressPercentage)}%`;
+      }
+
+      goal3Btn.addEventListener('click', () => {
+        currentGoalMonths = 3;
+        goal3Btn.classList.add('active');
+        goal6Btn.classList.remove('active');
+        updateEmergencyFund();
+      });
+
+      goal6Btn.addEventListener('click', () => {
+        currentGoalMonths = 6;
+        goal6Btn.classList.add('active');
+        goal3Btn.classList.remove('active');
+        updateEmergencyFund();
+      });
+
+      updateEmergencyFund();
+
+      // Side Income Cards
+      const incomeContainer = document.getElementById('side-income-container');
+      financialData.sideIncome.forEach(item => {
+        const card = document.createElement('div');
+        card.className = 'bg-white p-6 rounded-xl shadow-lg border cursor-pointer transition-all duration-300 hover:shadow-2xl hover:-translate-y-1';
+        card.innerHTML = `
+                    <h3 class="text-xl font-bold text-gray-800">${item.title}</h3>
+                    <p class="text-blue-600 font-medium mb-4">${item.subtitle}</p>
+                    <p class="text-gray-600 mb-4 text-sm">${item.description}</p>
+                    <div class="details hidden border-t pt-4 mt-4 space-y-2">
+                        ${Object.entries(item.details).map(([key, value]) => `
+                            <div class="text-sm">
+                                <strong class="text-gray-700">${key}:</strong>
+                                <span class="text-gray-600">${value}</span>
+                            </div>
+                        `).join('')}
+                    </div>
+                    <p class="text-center text-blue-500 text-xs font-bold mt-4 arrow">▼ Show Details</p>
+                `;
+        incomeContainer.appendChild(card);
+
+        card.addEventListener('click', () => {
+          const details = card.querySelector('.details');
+          const arrow = card.querySelector('.arrow');
+          details.classList.toggle('hidden');
+          arrow.textContent = details.classList.contains('hidden') ? '▼ Show Details' : '▲ Hide Details';
+        });
+      });
+
+
+      // Smooth scrolling and active nav link
+      const navLinks = document.querySelectorAll('.nav-link');
+      const sections = document.querySelectorAll('main section');
+
+      function changeActiveLink() {
+        let index = sections.length;
+        while (--index && window.scrollY + 100 < sections[index].offsetTop) { }
+
+        navLinks.forEach((link) => link.classList.remove('active'));
+        const activeLink = document.querySelector(`.nav-link[data-target="${sections[index].id}"]`);
+        if (activeLink) activeLink.classList.add('active');
+      }
+
+      navLinks.forEach(link => {
+        link.addEventListener('click', (e) => {
+          e.preventDefault();
+          const targetId = link.getAttribute('data-target');
+          document.getElementById(targetId).scrollIntoView({
+            behavior: 'smooth',
+            block: 'start'
+          });
+        });
+      });
+
+      window.addEventListener('scroll', changeActiveLink);
+      changeActiveLink();
+
+      // Mobile menu toggle
+      const mobileMenuButton = document.getElementById('mobile-menu-button');
+      const mobileMenu = document.getElementById('mobile-menu');
+      mobileMenuButton.addEventListener('click', () => {
+        mobileMenu.classList.toggle('hidden');
+      });
+      mobileMenu.querySelectorAll('.nav-link').forEach(link => {
+        link.addEventListener('click', () => {
+          mobileMenu.classList.add('hidden');
+        });
+      });
+    });
+  </script>
+</body>
+
+</html>

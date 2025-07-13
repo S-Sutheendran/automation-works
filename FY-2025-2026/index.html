@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Interactive Financial Freedom Roadmap 2026</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <!-- Chosen Palette: Warm Harmony -->
+  <!-- Application Structure Plan: A thematic, single-page dashboard. The structure begins with a high-level "Dashboard" for a quick overview, followed by sections dedicated to core pillars of the report: Income, Wealth, Optimization, Timeline, and Risks. This non-linear design allows users to freely explore areas of interest. Key interactions include hover-to-reveal details on charts, clickable cards and tabs to drill down into specific strategies, and an interactive timeline. This structure was chosen to transform the static report into an engaging, user-driven tool, making complex financial concepts more digestible and actionable than a simple linear document. -->
+  <!-- Visualization & Content Choices: 
+        - Report Info: Financial Snapshot/FFN -> Goal: Inform/Motivate -> Viz: Key Metric Cards & Line Chart -> Interaction: Hover for details -> Justification: Provides an immediate, visual summary of the primary goal and progress. -> Library: Chart.js.
+        - Report Info: Asset Allocation -> Goal: Compare/Inform -> Viz: Donut Chart -> Interaction: Click slices to highlight related text -> Justification: Visually connects asset classes to their strategic importance. -> Library: Chart.js.
+        - Report Info: Passive Income Streams -> Goal: Compare/Detail -> Viz: Tabbed Interface -> Interaction: Click tabs to switch content -> Justification: Organizes detailed comparisons cleanly. -> Library: Vanilla JS.
+        - Report Info: Quarterly Milestones -> Goal: Guide/Inform -> Viz: CSS/HTML Timeline -> Interaction: Click point to show details -> Justification: More engaging and scannable than a table. -> Library: Vanilla JS.
+        - Report Info: Debt/Expense/Tax -> Goal: Organize/Interact -> Viz: Accordion & Cards -> Interaction: Click to expand -> Justification: Manages dense information effectively. -> Library: Vanilla JS.
+        - CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. 
+    -->
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #FDFBF8;
+      color: #3D3D3D;
+    }
+
+    .nav-link {
+      transition: color 0.3s, border-color 0.3s;
+    }
+
+    .nav-link.active,
+    .nav-link:hover {
+      color: #A57F60;
+      border-bottom-color: #A57F60;
+    }
+
+    .card {
+      background-color: #FFFFFF;
+      border: 1px solid #EAEAEA;
+      border-radius: 0.75rem;
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+
+    .card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    }
+
+    .btn-primary {
+      background-color: #A57F60;
+      color: #FFFFFF;
+      transition: background-color 0.3s;
+    }
+
+    .btn-primary:hover {
+      background-color: #8E6C51;
+    }
+
+    .chart-container {
+      position: relative;
+      width: 100%;
+      max-width: 800px;
+      margin-left: auto;
+      margin-right: auto;
+      height: 300px;
+      max-height: 40vh;
+    }
+
+    @media (min-width: 768px) {
+      .chart-container {
+        height: 400px;
+      }
+    }
+
+    .timeline-item .timeline-dot {
+      transition: transform 0.3s;
+    }
+
+    .timeline-item:hover .timeline-dot {
+      transform: scale(1.5);
+    }
+
+    .tab-button.active {
+      border-color: #A57F60;
+      color: #A57F60;
+      background-color: #FDFBF8;
+    }
+  </style>
+</head>
+
+<body class="antialiased">
+
+  <header class="bg-white/80 backdrop-blur-lg sticky top-0 z-50 border-b border-gray-200">
+    <nav class="container mx-auto px-6 py-4">
+      <div class="flex justify-between items-center">
+        <h1 class="text-xl md:text-2xl font-bold text-[#8E6C51]">Financial Freedom 2026</h1>
+        <div class="hidden md:flex items-center space-x-8">
+          <a href="#dashboard" class="nav-link border-b-2 border-transparent pb-1">Dashboard</a>
+          <a href="#income" class="nav-link border-b-2 border-transparent pb-1">Income</a>
+          <a href="#wealth" class="nav-link border-b-2 border-transparent pb-1">Wealth</a>
+          <a href="#optimize" class="nav-link border-b-2 border-transparent pb-1">Optimize</a>
+          <a href="#timeline" class="nav-link border-b-2 border-transparent pb-1">Timeline</a>
+          <a href="#risks" class="nav-link border-b-2 border-transparent pb-1">Risks</a>
+        </div>
+        <div class="md:hidden">
+          <select id="mobile-nav" class="bg-white border border-gray-300 rounded-md p-2">
+            <option value="#dashboard">Dashboard</option>
+            <option value="#income">Income</option>
+            <option value="#wealth">Wealth</option>
+            <option value="#optimize">Optimize</option>
+            <option value="#timeline">Timeline</option>
+            <option value="#risks">Risks</option>
+          </select>
+        </div>
+      </div>
+    </nav>
+  </header>
+
+  <main class="container mx-auto px-6 py-12">
+
+    <section id="dashboard" class="text-center mb-24 scroll-mt-20">
+      <h2 class="text-3xl md:text-4xl font-bold mb-4">Your Accelerated Roadmap</h2>
+      <p class="max-w-3xl mx-auto text-lg text-gray-600 mb-12">This dashboard provides a high-level view of your journey
+        to financial freedom by 2026. Here, you'll find your key financial metrics, your ultimate goal, and a projection
+        of your net worth growth. Use this as your command center to track progress and stay motivated.</p>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+        <div class="card p-6">
+          <h3 class="text-gray-500 mb-2">Current Net Worth</h3>
+          <p class="text-4xl font-bold text-[#A57F60]">₹2 Cr</p>
+        </div>
+        <div class="card p-6">
+          <h3 class="text-gray-500 mb-2">Financial Freedom Number (FFN)</h3>
+          <p class="text-4xl font-bold text-[#A57F60]">₹1.54 Cr</p>
+          <p class="text-sm text-gray-500 mt-2">(Target Corpus)</p>
+        </div>
+        <div class="card p-6">
+          <h3 class="text-gray-500 mb-2">Target Passive Income</h3>
+          <p class="text-4xl font-bold text-[#A57F60]">₹5.14 L/yr</p>
+        </div>
+      </div>
+
+      <div class="card p-6">
+        <h3 class="text-2xl font-semibold mb-4">Projected Net Worth Growth</h3>
+        <div class="chart-container">
+          <canvas id="netWorthChart"></canvas>
+        </div>
+      </div>
+    </section>
+
+    <hr class="my-24 border-gray-200">
+
+    <section id="income" class="mb-24 scroll-mt-20">
+      <h2 class="text-3xl md:text-4xl font-bold text-center mb-4">Accelerate Your Income</h2>
+      <p class="max-w-3xl mx-auto text-lg text-gray-600 mb-12 text-center">Increasing your active income is the fuel for
+        your financial engine. This section breaks down high-impact strategies for both your primary career and scalable
+        side ventures. Explore these options to find the best fit for your skills and start boosting your earning
+        potential today.</p>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <div id="income-strategies"></div>
+      </div>
+    </section>
+
+    <hr class="my-24 border-gray-200">
+
+    <section id="wealth" class="mb-24 scroll-mt-20">
+      <h2 class="text-3xl md:text-4xl font-bold text-center mb-4">Build Your Wealth</h2>
+      <p class="max-w-3xl mx-auto text-lg text-gray-600 mb-12 text-center">With your existing capital and accelerated
+        income, the next step is strategic wealth building. This involves smart asset allocation and prioritizing
+        effective passive income streams. Interact with the chart and tabs below to understand how to make your money
+        work for you.</p>
+
+      <div class="flex flex-col lg:flex-row gap-8 items-start">
+        <div class="w-full lg:w-1/3 card p-6">
+          <h3 class="text-xl font-semibold mb-4 text-center">Suggested Asset Allocation</h3>
+          <div class="chart-container" style="height:300px; max-height:300px;">
+            <canvas id="assetAllocationChart"></canvas>
+          </div>
+        </div>
+        <div class="w-full lg:w-2/3">
+          <div id="passive-income-section"></div>
+        </div>
+      </div>
+    </section>
+
+    <hr class="my-24 border-gray-200">
+
+    <section id="optimize" class="mb-24 scroll-mt-20">
+      <h2 class="text-3xl md:text-4xl font-bold text-center mb-4">Optimize & Fortify</h2>
+      <p class="max-w-3xl mx-auto text-lg text-gray-600 mb-12 text-center">Fortify your financial foundation by
+        strategically eliminating debt and optimizing expenses. This section provides actionable methods for debt
+        repayment, smart spending habits, and tax-efficient investing in India, ensuring more of your money goes towards
+        building wealth.</p>
+      <div id="optimization-section"></div>
+    </section>
+
+    <hr class="my-24 border-gray-200">
+
+    <section id="timeline" class="mb-24 scroll-mt-20">
+      <h2 class="text-3xl md:text-4xl font-bold text-center mb-4">Your Execution Timeline</h2>
+      <p class="max-w-3xl mx-auto text-lg text-gray-600 mb-12 text-center">An ambitious goal requires a clear plan. This
+        interactive timeline breaks down your journey into manageable quarterly milestones. Click on each point to see
+        your targets for income growth, savings, and key actions to stay on track towards your 2026 goal.</p>
+
+      <div class="relative wrap overflow-hidden p-10 h-full">
+        <div class="border-2-2 absolute border-opacity-20 border-gray-700 h-full border" style="left: 50%"></div>
+        <div id="timeline-container" class="space-y-8"></div>
+      </div>
+    </section>
+
+    <hr class="my-24 border-gray-200">
+
+    <section id="risks" class="mb-24 scroll-mt-20">
+      <h2 class="text-3xl md:text-4xl font-bold text-center mb-4">Manage Your Risks</h2>
+      <p class="max-w-3xl mx-auto text-lg text-gray-600 mb-12 text-center">A smart financial plan anticipates
+        challenges. This section outlines key risks to your plan and provides robust strategies to mitigate them. Hover
+        over each category to understand how to protect your portfolio and ensure your path to financial freedom is
+        secure.</p>
+
+      <div id="risk-management-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+    </section>
+
+  </main>
+
+  <footer class="bg-gray-100 border-t border-gray-200 mt-12">
+    <div class="container mx-auto px-6 py-6 text-center text-gray-600">
+      <p>&copy; 2025 Your Financial Freedom Roadmap. This is an illustrative tool based on the provided report.</p>
+    </div>
+  </footer>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+
+      const formatCurrency = (value) => `₹${(value / 100000).toFixed(2)} L`;
+      const formatNetWorth = (value) => `₹${(value / 10000000).toFixed(2)} Cr`;
+
+      const reportData = {
+        netWorthProjection: {
+          labels: ['Start', 'Q1 25', 'Q2 25', 'Q3 25', 'Q4 25', 'Q1 26', 'Q2 26 Goal'],
+          data: [20000000, 20500000, 21200000, 22000000, 23000000, 24200000, 25500000]
+        },
+        assetAllocation: {
+          labels: ['Stocks', 'Real Estate (REITs)', 'Digital Assets', 'Private/P2P', 'Low-Risk'],
+          data: [45, 30, 10, 10, 5],
+          colors: ['#A57F60', '#C2A38C', '#E0C8B8', '#8E6C51', '#D6BFA9']
+        },
+        incomeStrategies: [
+          {
+            title: 'Career Growth',
+            icon: '💼',
+            description: 'Focus on high-value activities to increase your primary income.',
+            points: [
+              '<strong>Upskilling:</strong> Master ROI-driven skills like Data Analytics, AI, or Digital Marketing.',
+              '<strong>Salary Negotiation:</strong> Research your market value and negotiate based on the impact you deliver.',
+              '<strong>The 80/20 Rule:</strong> Identify and focus on the 20% of tasks that generate 80% of your results.'
+            ]
+          },
+          {
+            title: 'Scalable Side Ventures',
+            icon: '🚀',
+            description: 'Build multiple income streams to accelerate wealth accumulation.',
+            points: [
+              '<strong>Digital Products:</strong> Create and sell e-books or online courses on platforms like Udemy.',
+              '<strong>VA Services:</strong> Offer remote administrative support with low startup costs.',
+              '<strong>Dropshipping:</strong> Run an e-commerce store without holding inventory, for quick potential ROI.'
+            ]
+          }
+        ],
+        passiveIncome: [
+          {
+            name: 'Dividends',
+            description: 'Earn regular income from stocks and mutual funds. A ₹50 lakh portfolio yielding 3% can generate ₹1.5 lakh annually.',
+            details: '<strong>Potential Yield:</strong> 3-5% (IT stocks avg. ~3.5%).<br><strong>Risk:</strong> Moderate. Dividends can be cut; sensitive to market changes.',
+          },
+          {
+            name: 'Real Estate',
+            description: 'Generate income from property rentals, either directly or through REITs for higher liquidity and less hassle.',
+            details: '<strong>Potential Yield:</strong> 2.5-4.5% (Direct Rental), 5-7% (REITs).<br><strong>Risk:</strong> Moderate to High. Requires capital and management.',
+          },
+          {
+            name: 'Digital Assets',
+            description: 'Create scalable assets like e-books, courses, or templates once and earn from them repeatedly.',
+            details: '<strong>Potential Yield:</strong> Variable (High Potential).<br><strong>Risk:</strong> Low to Moderate. Requires upfront creation and marketing effort.',
+          },
+          {
+            name: 'Private/P2P',
+            description: 'Lend money to individuals or invest in small businesses through online platforms for fixed returns.',
+            details: '<strong>Potential Yield:</strong> ~6% (P2P Lending).<br><strong>Risk:</strong> Moderate to High. Involves credit and platform risk.',
+          },
+          {
+            name: 'Low-Risk',
+            description: 'Utilize high-yield savings accounts and bonds for stable, albeit lower, returns with minimal risk.',
+            details: '<strong>Potential Yield:</strong> 2-5% (Bonds), 4%+ (Savings).<br><strong>Risk:</strong> Low. Safe and liquid but may not beat inflation.',
+          }
+        ],
+        optimization: {
+          debt: {
+            title: 'Accelerate Debt Elimination',
+            icon: '💳',
+            methods: [
+              { name: 'Debt Avalanche (Recommended)', detail: 'Pay off debts with the highest interest rates first to save the most money over time.' },
+              { name: 'Debt Snowball', detail: 'Pay off the smallest debts first for quick motivational wins.' }
+            ],
+            tip: 'Consolidate high-interest debts into a single, lower-rate loan to simplify payments and reduce interest costs.'
+          },
+          spending: {
+            title: 'Smart Spending & Expense Reduction',
+            icon: '🛒',
+            tips: [
+              'Follow the 50/30/20 rule, but aim for a higher savings rate.',
+              'Review and cut unused subscriptions relentlessly.',
+              'Avoid lifestyle inflation as your income grows.',
+              'Build a 3-6 month emergency fund to avoid future debt.'
+            ]
+          },
+          tax: {
+            title: 'Tax-Efficient Investing',
+            icon: '🧾',
+            strategies: [
+              { name: 'Capital Gains', detail: 'Long-term gains (>12 mo for equity, >24/36 for others) are generally taxed at a lower rate (12.5%) than short-term gains (slab rate or 20%). Plan your holding periods.' },
+              { name: 'Rental Income', detail: 'Utilize the 30% standard deduction on Net Annual Value and deduct home loan interest to reduce taxable rental income.' },
+              { name: 'Section 80C & NPS', detail: 'Maximize deductions up to ₹1.5 lakh (80C) and an additional ₹50,000 (NPS) to lower your taxable income.' }
+            ]
+          }
+        },
+        timeline: [
+          { quarter: 'Q1 2025', income: '₹8.82L', savings: '₹45k/mo', worth: '₹2.05Cr', actions: 'Prioritize high-interest debt; Start side hustles.' },
+          { quarter: 'Q2 2025', income: '₹9.26L', savings: '₹65k/mo', worth: '₹2.12Cr', actions: 'Aggressive debt repayment; First passive income investments.' },
+          { quarter: 'Q3 2025', income: '₹9.72L', savings: '₹80k/mo', worth: '₹2.20Cr', actions: 'Re-evaluate asset allocation; Explore REITs.' },
+          { quarter: 'Q4 2025', income: '₹10.21L', savings: '₹95k/mo', worth: '₹2.30Cr', actions: 'Target 50% debt reduction; Review tax plan.' },
+          { quarter: 'Q1 2026', income: '₹10.72L', savings: '₹110k/mo', worth: '₹2.42Cr', actions: 'Final debt elimination push; Assess passive income generated.' },
+          { quarter: 'Q2 2026', income: '₹11.26L', savings: '₹125k/mo', worth: '₹2.55Cr', actions: 'Confirm passive income covers expenses; Rebalance for withdrawal.' }
+        ],
+        risks: [
+          { name: 'Market Volatility', icon: '📈', mitigation: 'Diversify across asset classes. Maintain a long-term investment horizon and avoid panic selling.' },
+          { name: 'Inflation Risk', icon: '💸', mitigation: 'Invest in assets that historically outpace inflation, such as equities and real estate.' },
+          { name: 'Dividend Cuts', icon: '✂️', mitigation: 'Invest in companies with strong cash flow, low debt, and a long history of increasing dividends.' },
+          { name: 'REIT Risks', icon: '🏢', mitigation: 'Research management and property fundamentals. Prefer publicly traded REITs for better liquidity.' },
+          { name: 'P2P Default Risk', icon: '👥', mitigation: 'Diversify loans across many borrowers and platforms. Vet platforms for their default and recovery track record.' },
+          { name: 'Lifestyle Creep', icon: '🛍️', mitigation: 'Consciously maintain a disciplined spending pattern and direct raises or bonuses towards investments, not expenses.' },
+        ]
+      };
+
+
+      new Chart(document.getElementById('netWorthChart'), {
+        type: 'line',
+        data: {
+          labels: reportData.netWorthProjection.labels,
+          datasets: [{
+            label: 'Projected Net Worth',
+            data: reportData.netWorthProjection.data,
+            borderColor: '#A57F60',
+            backgroundColor: 'rgba(165, 127, 96, 0.1)',
+            fill: true,
+            tension: 0.3
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          scales: {
+            y: {
+              ticks: { callback: (value) => formatNetWorth(value) }
+            }
+          },
+          plugins: {
+            tooltip: {
+              callbacks: {
+                label: (context) => `Net Worth: ${formatNetWorth(context.raw)}`
+              }
+            }
+          }
+        }
+      });
+
+      const incomeContainer = document.getElementById('income-strategies');
+      reportData.incomeStrategies.forEach(s => {
+        const card = document.createElement('div');
+        card.className = 'card p-6';
+        card.innerHTML = `
+                    <h3 class="text-2xl font-semibold mb-4 flex items-center"><span class="text-3xl mr-3">${s.icon}</span>${s.title}</h3>
+                    <p class="text-gray-600 mb-4">${s.description}</p>
+                    <ul class="space-y-2 list-inside">
+                        ${s.points.map(p => `<li class="flex items-start"><span class="text-[#A57F60] mr-2 mt-1">✓</span><span>${p}</span></li>`).join('')}
+                    </ul>
+                `;
+        incomeContainer.appendChild(card);
+      });
+
+      new Chart(document.getElementById('assetAllocationChart'), {
+        type: 'doughnut',
+        data: {
+          labels: reportData.assetAllocation.labels,
+          datasets: [{
+            label: 'Asset Allocation',
+            data: reportData.assetAllocation.data,
+            backgroundColor: reportData.assetAllocation.colors,
+            borderColor: '#FDFBF8',
+            borderWidth: 4
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: { position: 'bottom' },
+            tooltip: {
+              callbacks: {
+                label: (context) => `${context.label}: ${context.raw}%`
+              }
+            }
+          }
+        }
+      });
+
+      const passiveIncomeContainer = document.getElementById('passive-income-section');
+      let passiveIncomeHTML = `<div class="flex flex-wrap gap-2 mb-4 border-b border-gray-200">`;
+      reportData.passiveIncome.forEach((item, index) => {
+        passiveIncomeHTML += `<button class="tab-button px-4 py-2 text-sm font-medium border-b-2 border-transparent ${index === 0 ? 'active' : ''}" data-target="tab-${index}">${item.name}</button>`;
+      });
+      passiveIncomeHTML += `</div>`;
+      reportData.passiveIncome.forEach((item, index) => {
+        passiveIncomeHTML += `
+                    <div id="tab-${index}" class="tab-content p-4 rounded-lg bg-white/50 ${index > 0 ? 'hidden' : ''}">
+                        <h4 class="text-xl font-semibold text-[#8E6C51] mb-2">${item.name}</h4>
+                        <p class="text-gray-600 mb-3">${item.description}</p>
+                        <p class="text-sm text-gray-800 bg-[#F8F7F4] p-3 rounded-md">${item.details}</p>
+                    </div>`;
+      });
+      passiveIncomeContainer.innerHTML = passiveIncomeHTML;
+
+      document.querySelectorAll('.tab-button').forEach(button => {
+        button.addEventListener('click', () => {
+          const targetId = button.dataset.target;
+          document.querySelectorAll('.tab-button').forEach(btn => btn.classList.remove('active'));
+          button.classList.add('active');
+          document.querySelectorAll('.tab-content').forEach(content => content.classList.add('hidden'));
+          document.getElementById(targetId).classList.remove('hidden');
+        });
+      });
+
+      const optimizationContainer = document.getElementById('optimization-section');
+      const { debt, spending, tax } = reportData.optimization;
+      optimizationContainer.innerHTML = `
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <div class="card p-6">
+                        <h3 class="text-2xl font-semibold mb-4 flex items-center"><span class="text-3xl mr-3">${debt.icon}</span>${debt.title}</h3>
+                        <div class="space-y-3">
+                           ${debt.methods.map(m => `<div class="p-3 bg-gray-50 rounded-md"><p><strong>${m.name}:</strong> ${m.detail}</p></div>`).join('')}
+                        </div>
+                        <p class="mt-4 text-sm text-gray-600 bg-amber-50 p-3 rounded-md"><strong>Pro Tip:</strong> ${debt.tip}</p>
+                    </div>
+                     <div class="card p-6">
+                        <h3 class="text-2xl font-semibold mb-4 flex items-center"><span class="text-3xl mr-3">${spending.icon}</span>${spending.title}</h3>
+                         <ul class="space-y-2 list-inside">
+                            ${spending.tips.map(p => `<li class="flex items-start"><span class="text-[#A57F60] mr-2 mt-1">✓</span><span>${p}</span></li>`).join('')}
+                        </ul>
+                    </div>
+                     <div class="card p-6">
+                        <h3 class="text-2xl font-semibold mb-4 flex items-center"><span class="text-3xl mr-3">${tax.icon}</span>${tax.title}</h3>
+                        <div class="space-y-2">
+                             ${tax.strategies.map(s => `
+                                <div class="accordion-item">
+                                    <button class="accordion-header w-full text-left font-semibold p-3 bg-gray-50 rounded-md flex justify-between items-center">
+                                        <span>${s.name}</span>
+                                        <span class="transform transition-transform duration-300">▼</span>
+                                    </button>
+                                    <div class="accordion-content hidden p-3 text-sm text-gray-600">
+                                        ${s.detail}
+                                    </div>
+                                </div>
+                             `).join('')}
+                        </div>
+                    </div>
+                </div>
+            `;
+
+      document.querySelectorAll('.accordion-header').forEach(header => {
+        header.addEventListener('click', () => {
+          const content = header.nextElementSibling;
+          const arrow = header.querySelector('span:last-child');
+          content.classList.toggle('hidden');
+          arrow.classList.toggle('rotate-180');
+        });
+      });
+
+      const timelineContainer = document.getElementById('timeline-container');
+      reportData.timeline.forEach((item, index) => {
+        const isRight = index % 2 !== 0;
+        const timelineItem = document.createElement('div');
+        timelineItem.className = `timeline-item mb-8 flex justify-between items-center w-full ${isRight ? 'flex-row-reverse left-timeline' : 'right-timeline'}`;
+        timelineItem.innerHTML = `
+                    <div class="order-1 w-5/12"></div>
+                    <div class="z-20 flex items-center order-1 bg-[#A57F60] shadow-xl w-8 h-8 rounded-full timeline-dot">
+                        <h1 class="mx-auto font-semibold text-sm text-white">${index + 1}</h1>
+                    </div>
+                    <div class="order-1 card w-5/12 p-4">
+                        <h3 class="mb-2 font-bold text-[#A57F60] text-lg">${item.quarter}</h3>
+                        <p class="text-sm leading-snug tracking-wide text-gray-700"><strong>Income:</strong> ${item.income}</p>
+                        <p class="text-sm leading-snug tracking-wide text-gray-700"><strong>Savings:</strong> ${item.savings}</p>
+                        <p class="text-sm leading-snug tracking-wide text-gray-700"><strong>Net Worth:</strong> ${item.worth}</p>
+                        <p class="text-sm leading-snug tracking-wide text-gray-600 mt-2 bg-gray-50 p-2 rounded-md"><em>${item.actions}</em></p>
+                    </div>
+                `;
+        timelineContainer.appendChild(timelineItem);
+      });
+
+      const riskGrid = document.getElementById('risk-management-grid');
+      reportData.risks.forEach(risk => {
+        const riskCard = document.createElement('div');
+        riskCard.className = 'card p-6';
+        riskCard.innerHTML = `
+                    <div class="flex items-center mb-3">
+                        <span class="text-3xl mr-4">${risk.icon}</span>
+                        <h4 class="text-xl font-semibold">${risk.name}</h4>
+                    </div>
+                    <p class="text-gray-600">${risk.mitigation}</p>
+                `;
+        riskGrid.appendChild(riskCard);
+      });
+
+      document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+          e.preventDefault();
+          document.querySelector(this.getAttribute('href')).scrollIntoView({
+            behavior: 'smooth'
+          });
+        });
+      });
+
+      document.getElementById('mobile-nav').addEventListener('change', function (e) {
+        window.location.hash = e.target.value;
+      });
+
+    });
+  </script>
+</body>
+
+</html>
