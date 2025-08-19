@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The Blockchain Revolution: An Interactive Infographic</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #f8f9fa;
+      color: #343a40;
+    }
+
+    .gradient-text {
+      background: linear-gradient(90deg, #58508d, #bc5090, #ff6361);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .chart-container {
+      position: relative;
+      width: 100%;
+      max-width: 600px;
+      margin-left: auto;
+      margin-right: auto;
+      height: 300px;
+      max-height: 400px;
+    }
+
+    @media (min-width: 768px) {
+      .chart-container {
+        height: 350px;
+      }
+    }
+
+    .flow-arrow {
+      font-size: 2rem;
+      color: #58508d;
+      line-height: 1;
+    }
+
+    .flow-box {
+      border: 2px solid #58508d;
+      background-color: white;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .flow-box:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    }
+  </style>
+</head>
+
+<body class="antialiased">
+
+  <main class="container mx-auto p-4 md:p-8">
+
+    <header class="text-center py-12 md:py-20">
+      <h1 class="text-5xl md:text-7xl font-black mb-4">The <span class="gradient-text">Blockchain</span> Revolution</h1>
+      <p class="text-xl md:text-2xl text-gray-600 max-w-3xl mx-auto">
+        Exploring the decentralized technology that's rebuilding trust, security, and efficiency in the digital world.
+      </p>
+    </header>
+
+    <section id="what-is-blockchain" class="mb-16">
+      <h2 class="text-3xl md:text-4xl font-bold text-center mb-10">What is Blockchain?</h2>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12 text-center">
+        <div class="bg-white p-6 rounded-lg shadow-md">
+          <div class="text-5xl mb-4" style="color: #003f5c;">🌐</div>
+          <h3 class="text-xl font-bold mb-2">Decentralization</h3>
+          <p class="text-gray-600">No single entity has control. The ledger is distributed across a network of
+            computers, eliminating single points of failure.</p>
+        </div>
+        <div class="bg-white p-6 rounded-lg shadow-md">
+          <div class="text-5xl mb-4" style="color: #bc5090;">🔒</div>
+          <h3 class="text-xl font-bold mb-2">Immutability</h3>
+          <p class="text-gray-600">Once a transaction is recorded, it cannot be altered. Cryptographic links between
+            blocks ensure a tamper-proof history.</p>
+        </div>
+        <div class="bg-white p-6 rounded-lg shadow-md">
+          <div class="text-5xl mb-4" style="color: #ff6361;">👁️</div>
+          <h3 class="text-xl font-bold mb-2">Transparency</h3>
+          <p class="text-gray-600">While participants can be pseudonymous, all transactions on the ledger are visible to
+            everyone on the network, fostering trust.</p>
+        </div>
+      </div>
+
+      <div class="bg-white p-6 md:p-8 rounded-lg shadow-lg">
+        <h3 class="text-2xl font-bold text-center mb-6">How a Transaction Works</h3>
+        <div
+          class="flex flex-col md:flex-row items-center justify-center space-y-4 md:space-y-0 md:space-x-4 text-center">
+          <div class="flow-box p-4 rounded-lg w-full md:w-1/5">
+            <p class="font-semibold">1. Initiation</p>
+            <p class="text-sm text-gray-500">A user starts a transaction from their wallet.</p>
+          </div>
+          <div class="flow-arrow hidden md:block">&rarr;</div>
+          <div class="flow-box p-4 rounded-lg w-full md:w-1/5">
+            <p class="font-semibold">2. Broadcast</p>
+            <p class="text-sm text-gray-500">The transaction is sent to the network of nodes.</p>
+          </div>
+          <div class="flow-arrow hidden md:block">&rarr;</div>
+          <div class="flow-box p-4 rounded-lg w-full md:w-1/5">
+            <p class="font-semibold">3. Validation</p>
+            <p class="text-sm text-gray-500">Nodes use consensus (PoW/PoS) to verify the transaction.</p>
+          </div>
+          <div class="flow-arrow hidden md:block">&rarr;</div>
+          <div class="flow-box p-4 rounded-lg w-full md:w-1/5">
+            <p class="font-semibold">4. Block Creation</p>
+            <p class="text-sm text-gray-500">The validated transaction is added to a new block.</p>
+          </div>
+          <div class="flow-arrow hidden md:block">&rarr;</div>
+          <div class="flow-box p-4 rounded-lg w-full md:w-1/5">
+            <p class="font-semibold">5. Chain Update</p>
+            <p class="text-sm text-gray-500">The new block is added to the blockchain, making it permanent.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="titans" class="mb-16">
+      <h2 class="text-3xl md:text-4xl font-bold text-center mb-10">The Titans: Bitcoin vs. Ethereum</h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <div class="bg-white p-6 rounded-lg shadow-lg">
+          <h3 class="text-2xl font-bold text-center mb-4">Core Metrics Comparison</h3>
+          <p class="text-center text-gray-600 mb-4">Ethereum's Proof-of-Stake model allows for significantly faster
+            block processing than Bitcoin's Proof-of-Work.</p>
+          <div class="chart-container">
+            <canvas id="btcVsEthChart"></canvas>
+          </div>
+        </div>
+        <div class="bg-white p-6 rounded-lg shadow-lg">
+          <h3 class="text-2xl font-bold text-center mb-4">Primary Purpose & Philosophy</h3>
+          <p class="text-center text-gray-600 mb-4">While both are cryptocurrencies, their fundamental goals differ.
+            Bitcoin aims to be digital money, while Ethereum is a platform for building decentralized applications.</p>
+          <div class="chart-container">
+            <canvas id="purposeChart"></canvas>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="engine" class="mb-16">
+      <h2 class="text-3xl md:text-4xl font-bold text-center mb-10">The Engine: Smart Contracts & Wallets</h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <div class="bg-white p-6 rounded-lg shadow-lg">
+          <h3 class="text-2xl font-bold text-center mb-4">Smart Contract Advantages</h3>
+          <p class="text-center text-gray-600 mb-4">These self-executing contracts automate agreements, offering major
+            benefits over traditional systems by eliminating intermediaries.</p>
+          <div class="chart-container">
+            <canvas id="smartContractChart"></canvas>
+          </div>
+        </div>
+        <div class="bg-white p-6 rounded-lg shadow-lg">
+          <h3 class="text-2xl font-bold text-center mb-4">Wallet Types: Security vs. Convenience</h3>
+          <p class="text-center text-gray-600 mb-4">Users must choose between the high security of offline "cold"
+            wallets and the convenience of online "hot" wallets for daily use.</p>
+          <div class="chart-container">
+            <canvas id="walletChart"></canvas>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="disruption" class="mb-16">
+      <h2 class="text-3xl md:text-4xl font-bold text-center mb-10">Industry Disruption</h2>
+      <div class="grid grid-cols-1 lg:grid-cols-5 gap-8">
+        <div class="bg-white p-6 rounded-lg shadow-lg lg:col-span-3">
+          <h3 class="text-2xl font-bold text-center mb-4">Impact Across Key Sectors</h3>
+          <p class="text-center text-gray-600 mb-4">Blockchain's potential for disruption varies by industry, with
+            finance and supply chain seeing the most significant early adoption and impact.</p>
+          <div class="chart-container h-[400px] max-h-[500px]">
+            <canvas id="industryImpactChart"></canvas>
+          </div>
+        </div>
+        <div class="bg-white p-6 rounded-lg shadow-lg lg:col-span-2 flex flex-col justify-center">
+          <h3 class="text-2xl font-bold text-center mb-4">Supply Chain: Before & After</h3>
+          <p class="text-center text-gray-600 mb-6">Blockchain transforms opaque supply chains into transparent,
+            traceable systems.</p>
+          <div class="space-y-6">
+            <div>
+              <h4 class="font-bold text-lg text-red-600">Before: Opaque & Centralized</h4>
+              <div class="flex items-center justify-between text-sm p-2 bg-red-50 rounded-md">
+                <span>Producer</span>
+                <span class="text-gray-400">?</span>
+                <span>Shipper</span>
+                <span class="text-gray-400">?</span>
+                <span>Retailer</span>
+              </div>
+              <p class="text-xs text-center mt-1 text-gray-500">Data is siloed, making tracking difficult and fraud
+                possible.</p>
+            </div>
+            <div>
+              <h4 class="font-bold text-lg text-green-600">After: Transparent & Decentralized</h4>
+              <div
+                class="flex items-center justify-between text-sm p-2 bg-green-50 rounded-md border-2 border-green-500">
+                <span>Producer</span>
+                <span class="text-green-500 font-bold">&rarr;</span>
+                <span>Shipper</span>
+                <span class="text-green-500 font-bold">&rarr;</span>
+                <span>Retailer</span>
+              </div>
+              <p class="text-xs text-center mt-1 text-gray-500">A shared, immutable ledger provides end-to-end
+                visibility for all parties.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="future" class="mb-12">
+      <h2 class="text-3xl md:text-4xl font-bold text-center mb-10">The Future is Decentralized</h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <div class="bg-white p-6 rounded-lg shadow-lg">
+          <h3 class="text-2xl font-bold text-center mb-4">In-Demand Developer Skills</h3>
+          <p class="text-center text-gray-600 mb-4">Building the decentralized future requires a mix of foundational
+            programming, smart contract expertise, and robust security practices.</p>
+          <div class="chart-container">
+            <canvas id="developerSkillsChart"></canvas>
+          </div>
+        </div>
+        <div class="bg-white p-8 rounded-lg shadow-lg flex flex-col items-center justify-center text-center">
+          <div class="text-6xl mb-4">🚀</div>
+          <h3 class="text-2xl font-bold mb-2">Ready to Build the Future?</h3>
+          <p class="text-gray-600 mb-6">The world of blockchain is constantly evolving. The demand for skilled
+            developers who can build secure, efficient, and innovative decentralized applications has never been higher.
+          </p>
+          <a href="#"
+            class="bg-gradient-to-r from-[#58508d] to-[#bc5090] text-white font-bold py-3 px-6 rounded-lg hover:opacity-90 transition-opacity">
+            Start Learning
+          </a>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="text-center p-6 border-t mt-8">
+    <p class="text-gray-500 text-sm">Infographic created based on "The Transformative Impact of Blockchain Technology
+      Across Industries".</p>
+  </footer>
+
+  <script>
+    const brilliantBlues = {
+      deepBlue: '#003f5c',
+      indigo: '#58508d',
+      magenta: '#bc5090',
+      coral: '#ff6361',
+      gold: '#ffa600'
+    };
+
+    const chartColors = [brilliantBlues.indigo, brilliantBlues.coral, brilliantBlues.gold, brilliantBlues.magenta, brilliantBlues.deepBlue];
+
+    function wrapLabel(str, maxWidth) {
+      if (str.length <= maxWidth) {
+        return str;
+      }
+      const words = str.split(' ');
+      let lines = [];
+      let currentLine = words[0];
+
+      for (let i = 1; i < words.length; i++) {
+        if ((currentLine + ' ' + words[i]).length > maxWidth) {
+          lines.push(currentLine);
+          currentLine = words[i];
+        } else {
+          currentLine += ' ' + words[i];
+        }
+      }
+      lines.push(currentLine);
+      return lines;
+    }
+
+    const tooltipTitleCallback = (tooltipItems) => {
+      const item = tooltipItems[0];
+      let label = item.chart.data.labels[item.dataIndex];
+      if (Array.isArray(label)) {
+        return label.join(' ');
+      }
+      return label;
+    };
+
+    const defaultChartOptions = {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: {
+          labels: {
+            color: '#343a40',
+            font: {
+              family: "'Inter', sans-serif"
+            }
+          }
+        },
+        tooltip: {
+          callbacks: {
+            title: tooltipTitleCallback
+          },
+          backgroundColor: '#343a40',
+          titleFont: {
+            size: 14,
+            family: "'Inter', sans-serif"
+          },
+          bodyFont: {
+            size: 12,
+            family: "'Inter', sans-serif"
+          }
+        }
+      },
+      scales: {
+        x: {
+          ticks: { color: '#343a40' },
+          grid: { display: false }
+        },
+        y: {
+          ticks: { color: '#343a40' },
+          grid: { color: '#e9ecef' }
+        }
+      }
+    };
+
+    new Chart(document.getElementById('btcVsEthChart'), {
+      type: 'bar',
+      data: {
+        labels: ['Avg. Block Time (seconds)', 'Avg. Transaction Speed (TPS)'],
+        datasets: [{
+          label: 'Bitcoin',
+          data: [600, 7],
+          backgroundColor: brilliantBlues.gold,
+          borderColor: brilliantBlues.gold,
+          borderWidth: 1
+        }, {
+          label: 'Ethereum',
+          data: [12, 15],
+          backgroundColor: brilliantBlues.indigo,
+          borderColor: brilliantBlues.indigo,
+          borderWidth: 1
+        }]
+      },
+      options: { ...defaultChartOptions, indexAxis: 'y' }
+    });
+
+    new Chart(document.getElementById('purposeChart'), {
+      type: 'doughnut',
+      data: {
+        labels: ['Bitcoin: Digital Gold / Store of Value', 'Ethereum: World Computer / dApp Platform'],
+        datasets: [{
+          data: [50, 50],
+          backgroundColor: [brilliantBlues.gold, brilliantBlues.indigo],
+          hoverOffset: 4
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: { position: 'top' },
+          tooltip: {
+            callbacks: {
+              title: tooltipTitleCallback
+            }
+          }
+        }
+      }
+    });
+
+    new Chart(document.getElementById('smartContractChart'), {
+      type: 'radar',
+      data: {
+        labels: ['Security', 'Speed', 'Savings', 'Accuracy', 'Reliability', 'Independence'],
+        datasets: [{
+          label: 'Smart Contract Benefits',
+          data: [90, 85, 95, 80, 92, 88],
+          fill: true,
+          backgroundColor: 'rgba(188, 80, 144, 0.2)',
+          borderColor: brilliantBlues.magenta,
+          pointBackgroundColor: brilliantBlues.magenta,
+        }]
+      },
+      options: {
+        ...defaultChartOptions,
+        scales: {
+          r: {
+            angleLines: { color: '#e9ecef' },
+            grid: { color: '#e9ecef' },
+            pointLabels: {
+              font: { size: 12 },
+              color: '#343a40'
+            },
+            ticks: {
+              backdropColor: 'transparent',
+              color: '#343a40'
+            }
+          }
+        }
+      }
+    });
+
+    new Chart(document.getElementById('walletChart'), {
+      type: 'bar',
+      data: {
+        labels: ['Security', 'Convenience'],
+        datasets: [{
+          label: 'Cold Wallet (Offline)',
+          data: [95, 30],
+          backgroundColor: brilliantBlues.deepBlue,
+        }, {
+          label: 'Hot Wallet (Online)',
+          data: [60, 90],
+          backgroundColor: brilliantBlues.coral,
+        }]
+      },
+      options: {
+        ...defaultChartOptions,
+        scales: {
+          y: {
+            beginAtZero: true,
+            max: 100,
+            title: {
+              display: true,
+              text: 'Rating (out of 100)'
+            }
+          }
+        }
+      }
+    });
+
+    new Chart(document.getElementById('industryImpactChart'), {
+      type: 'bubble',
+      data: {
+        datasets: [{
+          label: 'Banking & Finance',
+          data: [{ x: 20, y: 85, r: 35 }],
+          backgroundColor: brilliantBlues.indigo
+        }, {
+          label: 'Supply Chain',
+          data: [{ x: 45, y: 75, r: 30 }],
+          backgroundColor: brilliantBlues.coral
+        }, {
+          label: 'Cybersecurity',
+          data: [{ x: 70, y: 60, r: 25 }],
+          backgroundColor: brilliantBlues.gold
+        }, {
+          label: 'Healthcare',
+          data: [{ x: 30, y: 40, r: 20 }],
+          backgroundColor: brilliantBlues.magenta
+        }, {
+          label: 'Government',
+          data: [{ x: 60, y: 30, r: 15 }],
+          backgroundColor: brilliantBlues.deepBlue
+        }]
+      },
+      options: {
+        ...defaultChartOptions,
+        plugins: {
+          tooltip: {
+            callbacks: {
+              label: function (context) {
+                let label = context.dataset.label || '';
+                if (label) {
+                  label += ': ';
+                }
+                label += `Impact Score: ${context.parsed.y}`;
+                return label;
+              }
+            }
+          }
+        },
+        scales: {
+          x: {
+            title: { display: true, text: 'Adoption Stage (Early -> Mature)' },
+            min: 0,
+            max: 100,
+            ticks: { display: false },
+            grid: { display: true }
+          },
+          y: {
+            title: { display: true, text: 'Disruptive Impact Score' },
+            min: 0,
+            max: 100,
+            ticks: { stepSize: 20 }
+          }
+        }
+      }
+    });
+
+    const wrappedDeveloperLabels = [
+      'Smart Contract Dev (Solidity)',
+      'Security & Auditing',
+      'Blockchain Architecture',
+      'Cryptography',
+      'Web3 Frontend (Ethers.js)'
+    ].map(label => wrapLabel(label, 16));
+
+    new Chart(document.getElementById('developerSkillsChart'), {
+      type: 'bar',
+      data: {
+        labels: wrappedDeveloperLabels,
+        datasets: [{
+          label: 'Relative Demand',
+          data: [95, 90, 80, 70, 75],
+          backgroundColor: chartColors,
+          borderColor: chartColors,
+          borderWidth: 1
+        }]
+      },
+      options: {
+        ...defaultChartOptions,
+        indexAxis: 'y',
+        plugins: {
+          legend: { display: false }
+        },
+        scales: {
+          x: {
+            beginAtZero: true,
+            max: 100
+          }
+        }
+      }
+    });
+  </script>
+</body>
+
+</html>
