@@ -408,7 +408,7 @@ console.log('10' - '4' - '3' - 2 + '5');
 
 /*
 
-// Truthy ^ Falsy Values
+// Truthy & Falsy Values
 
 // 5 values = 0, '', undefined, null, NaN
 
